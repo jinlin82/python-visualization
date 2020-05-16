@@ -1,7 +1,7 @@
 ---
-title: "软件相关操作"
-author: "Jin's students"
-date: "2019年3月"
+title: "分析报告"
+author: "张三"
+date: "2020年3月"
 institute: 中南财经政法大学统计与数学学院
 csl: ./style/chinese-gb7714-2015-numeric.csl
 css: ./style/markdown.css
@@ -39,28 +39,41 @@ Sys.setlocale("LC_ALL", "Chinese")
 - [x] 表格如何输出
 - [ ] Bib文件如何整理
 
+R代码
+
+```{r, results='markup'}
+2+3
+```
+
+python代码
+
+```{python, results='markup'}
+3+5
+```
+
+python图形
+
+```{python}
+import matplotlib.pyplot as plt
+plt.plot([0,1])
+```
 
 # 使用说明
 
-# example
+输出表格
 
-
-```{.mermaid caption="标题" loc="." width=800}
-graph LR;
-    中-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+```{r, results='markup'}
+knitr::kable(head(trees))
 ```
 
-大家都来
+行内公式 $\alpha+\hat{\beta}$ 。
 
+行间公式
 
-```{.mermaid caption="研究思路" loc="." width=800}
- stateDiagram
-    [*] --> Still
-    Still --> [*]
-```
+$$\bar x = \sum_{i=1}^n x_i +\bar y$$
+
+$$X \sim N(0,1)$$
+
 
 ## 文件结构 
 

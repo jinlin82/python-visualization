@@ -260,6 +260,7 @@ $endif$
 
 $body$
 
+
 $if(natbib)$
 $if(bibliography)$
 
@@ -270,6 +271,9 @@ $else$
 \renewcommand\refname{$biblio-title$}
 $endif$
 $endif$
+
+\phantomsection %
+\pdfbookmark{\refname}{reference}
 
 \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
 
