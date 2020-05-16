@@ -1,0 +1,70 @@
+---
+title: "软件相关操作"
+author: "Jin's students"
+date: "2019年3月"
+institute: 中南财经政法大学统计与数学学院
+csl: ./style/chinese-gb7714-2015-numeric.csl
+css: ./style/markdown.css
+bibliography: [./Bibfile.bib]
+eqnPrefixTemplate: ($$i$$)
+link-citations: true
+linkReferences: true
+chapters: true
+tableEqns: false
+autoEqnLabels: false
+classoption: "aspectratio=1610"
+---
+
+```{r setup, echo=F, purl=F}
+knitr::opts_knit$set(root.dir = getwd())
+knitr::opts_chunk$set(echo = TRUE, results = 'hide')
+knitr::opts_chunk$set(warning = FALSE, message=FALSE)
+knitr::opts_chunk$set(fig.align="center"
+                      ## ,out.width="0.9\\textwidth" # latex
+                      ,out.width="60%" # for both latex and html
+                      ,fig.width=5, fig.height=3
+                      )
+```
+
+```{r prepare, echo=F, purl=F}
+rm(list=ls())
+options(digits=4)
+options(scipen=100)
+graphics.off()
+Sys.setlocale("LC_ALL", "Chinese")
+```
+
+**TODO**
+
+- [x] 表格如何输出
+- [ ] Bib文件如何整理
+
+
+# 使用说明
+
+# example
+
+
+```{.mermaid caption="标题" loc="." width=800}
+graph LR;
+    中-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
+大家都来
+
+
+```{.mermaid caption="研究思路" loc="." width=800}
+ stateDiagram
+    [*] --> Still
+    Still --> [*]
+```
+
+## 文件结构 
+
+## 使用方法
+
+# 参考文献
+[//]: # (\bibliography{Bibfile})
