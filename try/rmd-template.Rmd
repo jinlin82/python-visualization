@@ -48,6 +48,7 @@ R代码
 python代码
 
 ```{python, results='markup'}
+print('hello world')
 3+5
 ```
 
