@@ -43,6 +43,7 @@ R代码
 
 ```{r, results='markup'}
 2+3
+2+2
 ```
 
 python代码
@@ -50,6 +51,7 @@ python代码
 ```{python, results='markup'}
 print('hello world')
 3+5
+4+7
 ```
 
 python图形
