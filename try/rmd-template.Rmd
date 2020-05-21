@@ -43,7 +43,6 @@ R代码
 
 ```{r, results='markup'}
 2+3
-2+2
 ```
 
 python代码
