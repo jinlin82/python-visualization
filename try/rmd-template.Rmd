@@ -38,7 +38,7 @@ Sys.setlocale("LC_ALL", "Chinese")
 
 - [x] 表格如何输出
 - [ ] Bib文件如何整理
-
+Rhist
 R代码
 
 ```{r, results='markup'}
