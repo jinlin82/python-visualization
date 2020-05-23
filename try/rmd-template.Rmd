@@ -56,6 +56,9 @@ python代码
 print('hello world')
 3+5
 4+7
+2+2
+2+4
+
 ```
 
 python图形
