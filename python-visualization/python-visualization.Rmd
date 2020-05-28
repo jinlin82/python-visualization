@@ -39,58 +39,51 @@ library(reticulate)
 
 ### Facts
 
-1.  Initial release:2003; 13 years ago
-2.  Stable release: Stable release: 0.18.1 / 22 September 2016
-3.  Website: <http://matplotlib.org>
+1.  初始版本：2003；13年前
+2.  稳定版本：稳定版本：0.18.1；2016年9月22日
+3.  网址：<http://matplotlib.org>
 
-### What is matplotlib?
+### 什么是 matplotlib?
 
-1.  matplotlib is a library for making 2D plots of arrays in Python.
-2.  Although it has its origins in emulating the MATLAB graphics
-    commands, it is independent of MATLAB, and can be used in a
-    Pythonic, object oriented way.
-3.  Although matplotlib is written primarily in pure Python, it makes
-    heavy use of NumPy and other extension code to provide good
-    performance even for large arrays.
+1.  matplotlib 是一个用 Python 生成数组二维图形的库。
+2.  尽管它的起源是模仿 MATLAB 的图形命令，但它独立于 MATLAB，并且可以用
+    python的、面向对象的方式使用。
+3.  虽然 matplotlib 主要是用纯 Python 编写的，但是它大量使用 NumPy 和其他
+    扩展代码，以便为大型数组提供良好的性能。
 
-### three parts
 
-1.  The matplotlib code is conceptually divided into three parts:
 
-1.  the pylab interface is the set of functions provided by matplotlib.
-    1.  pylab which allow the user to create plots with code quite
-        similar to MATLAB figure generating code.
-    2.  Typically pylab is imported to bring NumPy and matplotlib into a
-        single global namespace for the most MATLAB like syntax, however
-        a more explicit import style, which names both matplotlib and
-        NumPy, is the preferred coding style.
-2.  The matplotlib frontend or matplotlib API is the set of classes that
-    do the heavy lifting, creating and managing figures, text, lines,
-    plots and so on.
-3.  The backends are device-dependent drawing devices, aka renderers,
-    that transform the frontend representation to hardcopy or a display
-    device.
+### 三个部分
+
+1.  Matplotlib 代码在概念上分为三部分:
+
+1.  Pylab 接口是由 matplotlib 提供的一组函数。
+    1.   Pylab，它允许用户创建与 MATLAB 图形生成代码相当类似的图形。
+    2.  一般来说，pylab 是为了将 NumPy 和 matplotlib 导入到一个类似
+    MATLAB 的语法的全局名称空间中，然而一个更明确的导入风格，同时命名
+    matplotlib 和 NumPy，是首选的编码风格。
+2.  Matplotlib 前端或 matplotlib API 是一组类，它们担负重任，做着创
+    建和管理图形、文本、线条、图形等工作。
+3.  后端是设备相关的绘图设备，又称呈现程序，它将前端表示转换为硬拷贝或
+    显示设备。
 
 # 基本概念
 
-### Two interfaces
+### 两个接口
 
-1.  matplotlib has two interfaces.
-2.  The first is based on MATLAB and uses a state-based interface.
-3.  The second option is an an object-oriented(OO) interface.
-4.  knowing that there are two approaches is vitally important when
-    plotting with matplotlib.
+1.  matplotlib 有两个接口。
+2.  第一种是基于 MATLAB 并使用基于状态的接口。 
+3.  第二种是面向对象(OO)接口。
+4.  在 matplotlib 绘图时，知道有两种方法是至关重要的。
 
 ## 图形组成部分
 
-### Figure
+### 图形
 
-1.  The whole figure. The figure keeps track of all the child Axes, a
-    smattering of \'special\' artists (titles, figure legends, etc), and
-    the canvas.
-2.  A figure can have any number of Axes, but to be useful should have
-    at least one.
-3.  The easiest way to create a new figure is with pyplot:
+1.  整个图形。 图形记录了所有的子坐标轴，少量的“特殊”ARTIST对象(标题，图例等) 
+2.  ，以及画布。
+3.  一个图形可以有任意数量的轴，但是为了能够使用，至少应该有一个轴。
+4.  创建一个新图形最简单的方法是用 pyplot:
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -103,53 +96,44 @@ fig, ax_lst = plt.subplots(2, 2)  # a figure with a 2x2 grid of Axes
 
 ```
 
-### Axes
+### 轴域(Axes)
 
-1.  This is what you think of as \'a plot\', it is the region of the
-    image with the data space.
-2.  A given figure can contain many Axes, but a given Axes object can
-    only be in one Figure.
-3.  The Axes contains two (or three in the case of 3D) Axis objects (be
-    aware of the difference between Axes and Axis) which take care of
-    the data limits (the data limits can also be controlled via set via
-    the set~xlim~() and set~ylim~() Axes methods).
-4.  Each Axes has a title (set via set~title~()), an x-label (set via
-    set~xlabel~()), and a y-label set via set~ylabel~()).
-5.  The Axes class and its member functions are the primary entry point
-    to working with the OO interface.
+1.  你所认为的“一个图” ，它是图像与数据空间的区域。
+2.  一个给定的图形可以包含许多轴，但是一个给定的轴对象只能在一个图中。
+3.  Axes 包含两个(3D 情况下包含三个) Axis 对象(注意 Axes 和 Axis 之间
+    的区别) ，它们负责数据限制(数据限制也可以通过 set xlim ()和 set ylim 
+    () Axes 方法来控制)。
+4.  每个轴都有一个标题(通过 set title ()设置)、一个 x 标签(通过 set xlabel 
+    ()设置)和一个通过 set ylabel ()设置的 y 标签集。
+5.  Axes 类及其成员函数是使用 OO 接口的主要入口点。
 
-### Axis
 
-1.  These are the number-line-like objects.
-2.  They take care of setting the graph limits and generating the ticks
-    (the marks on the axis) and ticklabels (strings labeling the ticks).
-3.  The location of the ticks is determined by a Locator object and the
-    ticklabel strings are formatted by a Formatter.
-4.  The combination of the correct Locator and Formatter gives very fine
-    control over the tick locations and labels.
+### 轴(Axis)
 
-### Artist
+1.  这些是类似数字行的对象。
+2.  它们负责设置图形限制并生成ticks(刻度)(轴上的标记)和 ticklabel(刻度标签) 
+    (标记刻度的字符串)。
+3.  刻度的位置由 Locator 对象确定，刻度标签字符串由 Formatter 格式化。
+4.  正确的定位器和格式化程序的组合可以很好地控制刻度位置和标签。
 
-1.  Basically everything you can see on the figure is an artist (even
-    the Figure, Axes, and Axis objects).
-2.  This includes Text objects, Line2D objects, collection objects,
-    Patch objects ... (you get the idea).
-3.  When the figure is rendered, all of the artists are drawn to the
-    canvas.
-4.  Most Artists are tied to an Axes; such an Artist cannot be shared by
-    multiple Axes, or moved from one to another.
+### Artist对象
+
+1.  基本上在图形中你能看到的所有东西都是artist对象 (甚至是图形、轴域和轴对象)。
+2.  这包括 Text 对象、 Line2D 对象、集合对象、补丁对象... (你了解了吗)。
+3.  当图被描绘时，所有的artist 都被画在画布上。
+4.  大多数 artist 都被绑在一个 axes 上，这样的 artist 不能被多个轴共享，
+    也不能从一个轴移动到另一个轴。
 
 ### 其他组成部分
 
 ![](images/1580807106.png)
 
-### Types of inputs to plotting functions
+### 绘图函数的输入类型
 
-1.  All of plotting functions expect np.array or np.ma.masked~array~ as
-    input.
-2.  Classes that are \'array-like\' such as pandas data objects and
-    np.matrix may or may not work as intended.
-3.  It is best to convert these to np.array objects prior to plotting.
+1.  所有的绘图函数期待以np.array 或 np.ma.masked_array输入。
+2.  例如pandas数据对象和 np.matrix 的“类似数组”的类可能正常工作，也可能不正常工
+    作。
+3.  最好在绘图之前将它们转换为 np.array 对象。
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -163,25 +147,21 @@ b = np.matrix([[1,2],[3,4]])
 b_asarray = np.asarray(b)
 ```
 
-### Matplotlib, pyplot and pylab: how are they related?
+### Matplotlib, pyplot and pylab: 它们是如何关联的？
 
-1.  Matplotlib is the whole package
-2.  and matplotlib.pyplot is a module in Matplotlib.
-3.  pylab is a convenience module that bulk imports matplotlib.pyplot
-    (for plotting) and numpy (for mathematics and working with arrays)
-    in a single namespace. pylab is deprecated and its use is strongly
-    discouraged because of namespace pollution. Use pyplot instead.
+1.  Matplotlib是整个包
+2.  matplotlib.pyplot是Matplotlib里的一个模块。
+3.  Pylab 是一个方便的模块，它在一个名称空间中批量导入 matplotlib.pyplot 
+    (用于绘图)和 numpy (用于数学和使用数组)。 Pylab 已被否决，并且由于名称
+    空间的污染，它的使用受到强烈反对。 使用 pyplot 代替
 
 ### pyplot
 
-1.  For functions in the pyplot module, there is always a \"current\"
-    figure and axes (which is created automatically on request).
-2.  For example, in the following example, the first call to plt.plot
-    creates the axes,
-3.  then subsequent calls to plt.plot add additional lines on the same
-    axes,
-4.  and plt.xlabel, plt.ylabel, plt.title and plt.legend set the axes
-    labels and title and add a legend.
+1.  对于 pyplot 模块中的函数，总是有一个“当前”图形和轴(根据请求自动创建)。
+2.  例如，在下面的示例中，对 plt.plot 的第一个调用创建轴。
+3.  随后对 plt.plot 的后续调用，在相同的轴上添加额外的行
+4.  plt.xlabel、 plt.ylabel、 plt.title 和 plt.legend 设置轴的标签和标题
+    并添加图例。
 
 ``` {python}
 x = np.linspace(0, 2, 100)
@@ -201,30 +181,23 @@ plt.show()
 
 ## 后端
 
-### What is a backend?
+### 什么是后端？
 
-1.  matplotlib targets many different use cases and output formats.
-2.  To support all of these use cases, matplotlib can target different
-    outputs, and each of these capabilities is called a backend;
-3.  the \"frontend\" is the user facing code, i.e., the plotting code,
-    whereas the \"backend\" does all the hard work behind-the-scenes to
-    make the figure.
-4.  There are two types of backends:
-    1.  user interface backends (for use in pygtk, wxpython, tkinter,
-        qt4, or macosx; also referred to as \"interactive backends\")
-    2.  and hardcopy backends to make image files (PNG, SVG, PDF, PS;
-        also referred to as \"non-interactive backends\").
+1.  Matplotlib 针对许多不同的用例和输出格式。
+2.  为了支持所有这些用例，matplotlib 可以针对不同的输出，每个功能都称为后端; 
+3.  前端”是面向用户的代码，即绘图代码，而“后端”完成所有在幕后制作图形的艰苦工作。
+4.  有两种类型的后端:
+    1.  用户界面后端(用于 pygtk、 wxpython、 tkinter、 qt4或 macosx; 也称
+        为“交互式后端”)
+    2.  硬拷贝后端(PNG、 SVG、 PDF、 PS; 也称为“非交互式后端”)。
 
-### Configure your backend
+### 配置后端
 
-1.  The backend parameter in your matplotlibrc file
-2.  If your script depends on a specific backend you can use the use()
-    function.
-3.  If you use the use() function, this must be done before importing
-    matplotlib.pyplot. Calling use() after pyplot has been imported will
-    have no effect.
-4.  Using use() will require changes in your code if users want to use a
-    different backend.
+1.  Matplotlibrc 文件中的后端参数
+2.  如果你的脚本依赖于特定的后端，则可以使用 use ()函数。
+3.  如果使用 use ()函数，则必须在导入 matplotlib.pyplot 之前完成。 在引入 
+    pyplot 之后调用 use ()将不起作用。
+4.  如果用户希望使用不同的后端，那么使用 use ()将需要对代码进行更改。
 
 ``` {python}
 import matplotlib
@@ -232,13 +205,12 @@ matplotlib.use('pdf')   ### generate postscript output by default
 
 ```
 
-### What is interactive mode?
+### 什么是交互模式？
 
-1.  Use of an interactive backend permits plotting to the screen.
-2.  Interactive mode may also be turned on via
-    `matplotlib.pyplot.ion()`,
-3.  and turned off via `matplotlib.pyplot.ioff()`.
-4.  Non-interactive example:
+1.  使用交互式后端可以在屏幕上绘图。
+2.  交互模式也可以通过 `matplotlib.pyplot.ion ()`打开
+3.  通过  `matplotlib.pyplot.ioff()`关闭。
+4.  非交互式例子::
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -247,16 +219,15 @@ plt.plot([1.6, 2.7])
 
 ```
 
-1.  Nothing happened--or at least nothing has shown up on the screen, To
-    make the plot appear, you need to do this:
+1.  什么都没有发生，或者至少屏幕上什么都没有显示出来，为了让绘图显示出来，
+    你需要这样做:
 
 ``` {python}
 plt.show()
 ```
 
-1.  Now you see the plot, but your terminal command line is
-    unresponsive; the `show()` command blocks the input of additional
-    commands until you manually kill the plot window.
+1.  现在您看到了绘图，但是您的终端命令行没有响应; show ()命令阻止了其他命令
+    的输入，直到您手动关闭绘图窗口。
 
 ## Pyplot 简介
 
