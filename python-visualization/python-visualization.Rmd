@@ -1105,51 +1105,60 @@ plt.show()
 2.  `legend(labels)`
 3.  `legend(handles, labels)`
 
-### Automatic detection of elements to be shown in the legend
+### Automatic detection of elements to be shown in the legend(自动检测元素添加到
+图例中)
 
 1.  The elements to be added to the legend are automatically determined,
-    when you do not pass in any extra arguments.
-2.  In this case, the labels are taken from the artist.
+    when you do not pass in any extra arguments.（当没有选择额外参数时，将自动确
+    定要添加到图例的元素）
+2.  In this case, the labels are taken from the artist.（在这种情况下，标签来自
+于美学映射）
 3.  You can specify them either at artist creation or by calling the
-    set~label~() method on the artist.
+    set~label~() method on the artist.（可以在创建美学映射时指定，也可以通过调用
+   set_label()函数的方法）
 4.  Specific lines can be excluded from the automatic legend element
-    selection by defining a label starting with an underscore.
+    selection by defining a label starting with an underscore.（通过定义以下划线
+   开头的标签可以从自动图例元素中排除特定的线）
 5.  This is default for all artists, so calling Axes.legend without any
     arguments and without setting the labels manually will result in no
-    legend being drawn.
+    legend being drawn.（这是默认设置，所以当没有手动设置标签直接调用
+    Axes.legend()函数将不会显示任何图例）
 
 ### 例子
 
 ``` {python}
-line, = ax.plot([1, 2, 3], label='Inline label')
-ax.legend()
+line, = plt.plot([1, 2, 3], label='Inline label')
+plt.legend()
 
-line, = ax.plot([1, 2, 3])
+line, = plt.plot([1, 2, 3])
 line.set_label('Label via method')
-ax.legend()
+plt.legend()
 
 ```
 
-### Labeling existing plot elements
+### Labeling existing plot elements（标记现有的绘图元素）
 
 1.  To make a legend for lines which already exist on the axes (via plot
     for instance), simply call this function with an iterable of
-    strings, one for each legend item.
+    strings, one for each legend item.（为已有的线制作图例（通过绘图，例如）简单
+    调用plt.legend()函数，为每一条线指定一个标签字符串）
 2.  Note: This way of using is discouraged, because the relation between
     plot elements and labels is only implicit by their order and can
-    easily be mixed up.
+    easily be mixed up.（注意：不鼓励使用这种方法，因为通过它们的顺序确定绘图元
+    素和标签之间的关系是隐晦的，很容易搞混乱）
 
 ``` {python}
-ax.plot([1, 2, 3])
-ax.legend(['A simple line'])
+plt.plot([1, 2, 3])
+plt.legend(['A simple line'])
 
 ```
 
-### Explicitly defining the elements in the legend
+### Explicitly defining the elements in the legend（明确定义图例中的元素）
 
 1.  For full control of which artists have a legend entry, it is
     possible to pass an iterable of legend artists followed by an
-    iterable of legend labels respectively.
+    iterable of legend labels respectively.（为了完全控制每一条线有一个图例，可
+    以通过指定一个可迭代的图例标签给要需要添加到图例上的线）
 
 `legend((line1, line2, line3), ('label1', 'label2', 'label3'))`
 
@@ -1188,19 +1197,25 @@ plt.show()
 ### Tight Layout
 
 1.  tight~layout~ automatically adjusts subplot params so that the
-    subplot(s) fits in to the figure area.
+    subplot(s) fits in to the figure area.(紧缩输出自动调整子图参数，以便子图适
+    合于图形区域)
 2.  tight~layout~() only considers ticklabels, axis labels, and titles.
-    Thus, other artists may be clipped and also may overlap.
-3.  An alternative to tight~layout~ is constrained~layout~.
+    Thus, other artists may be clipped and also may overlap.（紧缩输出只考虑刻度
+    标签、轴标签和标题。因此，其他的美学映射可能被剪裁也可能重叠。）
+3.  An alternative to tight~layout~ is constrained~layout~.（紧缩输出的另一种选择
+是限定输出）
 4.  To prevent this, the location of axes needs to be adjusted. For
     subplots, this can be done by adjusting the subplot params (Move the
-    edge of an axes to make room for tick labels).
-5.  `tight_layout()` that does this automatically for you.
+    edge of an axes to make room for tick labels).（为了防止这种情况发生，轴的位
+    置需要被调整，对于子图，可以调整子图参数完成（移动轴的边缘为刻度标签腾出空间））
+5.  `tight_layout()` that does this automatically for you.（tight_layout()函数自
+动执行）
 6.  Note that `matplotlib.pyplot.tight_layout()` will only adjust the
-    subplot params when it is called.
+    subplot params when it is called.（注意到只用被调用时才会调整子图的参数）
 7.  In order to perform this adjustment each time the figure is redrawn,
     you can call `fig.set_tight_layout(True)`, or, equivalently, set the
-    figure.autolayout rcParam to True.
+    figure.autolayout rcParam to True.（为了每次重新绘制图形时执行该操作，可以调
+    用函数fig.set_tight_layout(True)，或者用plt.rcParams['figure.autolayout']=True）
 
 ### 例子
 
@@ -1226,14 +1241,17 @@ example_plot(ax, fontsize=24)
 plt.tight_layout()
 ```
 
-### multiple subplots
+### multiple subplots(多个子图)
 
 1.  When you have multiple subplots, often you see labels of different
-    axes overlapping each other.
+    axes overlapping each other.（当有多个子图时，通常会出现不同坐标轴的标签互相重叠
+   的情况）
 2.  tight~layout~() will also adjust spacing between subplots to
-    minimize the overlaps.
+    minimize the overlaps.（tight_layout()函数也可以调整不同子图之间的空间尽量减
+    少出现重叠的情况）
 3.  tight~layout~() will work even if the sizes of subplots are
-    different as far as their grid specification is compatible.
+    different as far as their grid specification is compatible.（tight_layout()
+    函数对不同大小的子图也同样起作用，只要网格条件是兼容的）
 
 ### 例子
 
@@ -1257,16 +1275,20 @@ plt.tight_layout()
 1.  constrained~layout~ automatically adjusts subplots and decorations
     like legends and colorbars so that they fit in the figure window
     while still preserving, as best they can, the logical layout
-    requested by the user.
+    requested by the user.（constrained_layout()函数自动调整子图、图例和颜色条，
+   以便适合图形窗口，但是仍尽可能的保留逻辑布局）
 2.  constrained~layout~ is similar to tight~layout~, but uses a
     constraint solver to determine the size of axes that allows them to
-    fit.
+    fit.（constrained_layout()和tight_layout()相似，不过用了一个约束解算器用于确
+    定轴的大小）
 3.  constrained~layout~ needs to be activated before any axes are added
-    to a figure. Two ways of doing so are
+    to a figure. Two ways of doing so are（constrained_layout()需要先被激活，在
+    添加任何轴到图形前。有两种方法：）
     1.  using the respective argument to subplots() or figure(), e.g.:
-        `plt.subplots(constrained_layout=True)`
+        `plt.subplots(constrained_layout=True)`（使用各自的参数到子图或者图形，例如plt.subplots(constrained_layout=True)）
     2.  activate it via rcParams, like:
-        `plt.rcParams['figure.constrained_layout.use'] = True`
+        `plt.rcParams['figure.constrained_layout.use'] = True`（通过rcParams激
+        活，设置plt.rcParams['figure.constrained_layout.use'] = True）
 
 ### 例子
 
@@ -1569,22 +1591,26 @@ plt.show()
 
 # mplot3d工具箱
 
-### How is mplot3d different from MayaVi?
+### How is mplot3d different from MayaVi?（mplot3d和MayaVi有何不同）
 
 1.  MayaVi2 is a very powerful and featureful 3D graphing library. For
     advanced 3D scenes and excellent rendering capabilities, it is
-    highly recommended to use MayaVi2.
+    highly recommended to use MayaVi2.（MayaVi2是一个非常有用功能丰富的3D会图
+    库。有先进的3D图像和优秀的渲染能力，强力推荐使用MayaVi2）
 2.  mplot3d was intended to allow users to create simple 3D graphs with
     the same \"look-and-feel\" as matplotlib\'s 2D plots. Furthermore,
     users can use the same toolkit that they are already familiar with
-    to generate both their 2D and 3D plots.
+    to generate both their 2D and 3D plots.（mplot3d旨在允许用户使用与
+    matplotlib's 2D plots有相同外观和感觉的简单3D图形，用户可以使用他们已经熟悉
+    的生成2D和3D图的工具包toolkit）
 
 ### `Axes3D` object
 
 1.  An Axes3D object is created just like any other axes using the
-    `projection='3d'` keyword.
+    `projection='3d'` keyword.（创建一个Axes3D对象和其他轴一样，使用
+    `projection='3d'`这样的关键字）
 2.  Create a new matplotlib.figure.Figure and add a new axes to it of
-    type Axes3D:
+    type Axes3D:（创建一个新的画布并添加新的坐标轴）
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -1651,20 +1677,24 @@ plt.show()
 ### 其他常见作图包
 
 1.  Pandas is handy for simple plots but you need to be willing to learn
-    matplotlib to customize.
+    matplotlib to customize.（Pandas对于简单的情况比较方便，但是你需要愿意去学习matplotlib）
 2.  Seaborn can support some more complex visualization approaches but
     still requires matplotlib knowledge to tweak. The color schemes are
-    a nice bonus.
+    a nice bonus.（Seaborn可以支持更复杂的可视化方法，但是仍然需要matplotlib的知
+    识去支撑，它的颜色主题部分很好用）
 3.  ggplot ggplot is a plotting system for Python based on R\'s ggplot2
     and the Grammar of Graphics. It is built for making profressional
-    looking, plots quickly with minimal code.
+    looking, plots quickly with minimal code.（ggplot是一个基于R中ggplot2的Python
+    绘图系统及图形语法，它是为了让研究人员看起来用最少的代码快速绘图）
 4.  Bokeh is an interactive visualization library for modern web
     browsers. It provides elegant, concise construction of versatile
     graphics, and affords high-performance interactivity over large or
-    streaming datasets.
-5.  Mayavi: 3D scientific data visualization and plotting in Python.
+    streaming datasets.（ Bokeh是现代web浏览器的交互式可视化库，它提供了优雅、简
+    洁的多功能图形构建，以及提供大型或主流的高性能的交互性数据库）
+5.  Mayavi: 3D scientific data visualization and plotting in Python.（Mayavi使用
+Python进行科学数据可视化和绘制）
 6.  Turtle graphics is a popular way for introducing programming to
-    kids.
+    kids.（Turtle graphics是向孩子们介绍编程的一种流行方式）
 
 
 # 参考文献
