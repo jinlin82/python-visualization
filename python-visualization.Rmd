@@ -361,7 +361,7 @@ plt.setp(lines)
 
 ### 处理多个图形和轴
 
-1.  pyplot具有当前图形和当前轴的概念。
+1.  pyplot具有当前图形和当前轴的概念
 2.  All plotting commands apply to the current axes.
 3.  所有绘图命令都应用于当前轴。函数`gca()`返回当前轴(a
     matplotlib.axes.Axes 实例),
