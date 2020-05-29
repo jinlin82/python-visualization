@@ -831,45 +831,35 @@ matplotlib.matplotlib_fname()
 ## 基本概念
 
 
-### three layers to the matplotlib API
+### `Matplotlib API`的三层结构
 
-1.  the matplotlib.backend~bases~.FigureCanvas is the area onto which
-    the figure is drawn
-2.  the matplotlib.backend~bases~.Renderer is the object which knows how
-    to draw on the FigureCanvas
-3.  and the matplotlib.artist.Artist is the object that knows how to use
-    a renderer to paint onto the canvas.
-4.  Typically, all visible elements in a figure are subclasses of
-    Artist.
+1.  区域，也就是图形的绘制区域：`matplotlib.backend_bases.FigureCanvas`
+2.  区域上的渲染器：`matplotlib.backend_bases.Renderer`
+3.  用渲染器在画布上进行绘图： `matplotlib.artist.Artist` 
+4.  总的来说，所有的画布上的可视对象，都是`Artist`的一个子类。
 
-### three layers to the matplotlib API
+### `Matplotlib API`的三层结构
 
-1.  The FigureCanvas and Renderer handle all the details of talking to
-    user interface toolkits like wxPython or drawing languages like
-    PostScript®,
-2.  and the Artist handles all the high level constructs like
-    representing and laying out the figure, text, and lines.
-3.  The typical user will spend 95% of their time working with the
-    Artists.
+1.  区域和渲染器，例如`wxPython`或者绘图语言`PostScript`，都是一种用来和用户
+    进行交互的工具包。
+2.  `Artist`则负责所有的高级结构，比如产生图像、文本、线条等。
+3.  通常来说，使用者会花95%的时间来调整`Artist`。
 
-### two types of Artists: primitives and containers
 
-1.  The primitives represent the standard graphical objects we want to
-    paint onto our canvas: `Line2D, Rectangle, Text, AxesImage`, etc.,
-2.  and the containers are places to put them (`Axis, Axes and Figure`).
-3.  The standard use is to create a Figure instance, use the Figure to
-    create one or more Axes or Subplot instances,
-4.  and use the Axes instance helper methods to create the primitives.
+### `Artists`的两种类型：基元及容器
 
-### how to create Figure instance
+1.  基元：基元代表标准的画在区域上的图形对象： `Line2D, Rectangle, Text, AxesImage`等等。
+2.  容器：存储这些图形对象的容器，例如画布、坐标系(`Axis, Axes and Figure`)等等。
+3.  标准的做法是先创建一个`Figure`实例，然后在这个实例上绘制坐标系与子图实例。
+4.  然后使用这些坐标轴实例的方法去创建基元。
 
-1.  we can create a Figure instance using matplotlib.pyplot.figure(),
-    which is a convenience method for instantiating Figure instances and
-    connecting them with your user interface or drawing toolkit
-    FigureCanvas. However, this is not necessary.
-2.  you can work directly with PostScript, PDF Gtk+, or wxPython
-    FigureCanvas instances, instantiate your Figures directly and
-    connect them yourselves.
+### 如何创造`Figure`实例
+
+1.  使用`matplotlib.pyplot.figure()`可以创建一个`Figure`实例，也就是画布。这是
+    一种便捷的方法，可以把`Figure`跟用户界面或者工具库`FigureCanvas`连接起来。
+    当然，也不是必要的。
+2.  可以直接使用`PostSript`，`PDF Gtk+`，`wxPython FigureCanvas`实例，`Figures`能够
+    直接实例化图像，并且自行链接。
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -879,23 +869,16 @@ ax = fig.add_subplot(2, 1, 1) # two rows, one column, first plot
 
 ### Axes
 
-1.  The Axes is probably the most important class in the matplotlib API,
-    and the one you will be working with most of the time.
-2.  This is because the Axes is the plotting area into which most of the
-    objects go,
-3.  and the Axes has many special helper methods (plot(), text(),
-    hist(), imshow()) to create the most common graphics primitives
-    (Line2D, Text, Rectangle, Image, respectively).
-4.  These helper methods will take your data (e.g., numpy arrays and
-    strings) and create primitive Artist instances as needed (e.g.,
-    Line2D), add them to the relevant containers, and draw them when
-    requested.
-5.  Most of you are probably familiar with the Subplot, which is just a
-    special case of an Axes that lives on a regular rows by columns grid
-    of Subplot instances.
-6.  If you want to create an Axes at an arbitrary location, simply use
-    the add~axes~() method which takes a list of \[left, bottom, width,
-    height\] values in 0-1 relative figure coordinates:
+1.  `Axes`在matplotlib API 中可以算是最重要的一个类，并且也是需要花的时间
+    最多的一部分。
+2.  这是因为`Axes`是大部分对象在作图区域上显示得部分。
+3.  并且`Axes`有很多特别的帮助方法(`plot(), text(), hist(), imshow()`)，
+    用来创建最通用得作图基元（Line2D, Text, Rectangle, Image,等等）。
+4.  这些帮助方法将会把你的数据（比如`numpy`数组、字符串等）通过基元`Artists`实例
+    表现出来，并且加到相关的存储器中，当要求时，就可以绘制出来。
+5.  可能大部分人比较熟悉的是子图的做法，但子图只是当坐标系是规整时的一种特殊情况。
+6.  如果想要创建一个任意位置的`Axes`，只需要使用`add_axes()`方法，并把你想要创建
+    的位置这样一个列表：\[left, bottom, width, height\]。这四者的取值范围都在0-1。
 
 ### 例子
 
@@ -911,50 +894,42 @@ line, = ax.plot(t, s, color='blue', lw=2)
 type(ax.lines)
 len(ax.lines)
 type(line)
+
+## delete lines
+del ax.lines[0]
+#ax.lines.remove(line)
 ```
 
-1.  ax is the Axes instance created by the fig.add~subplot~ call above
-    (remember Subplot is just a subclass of Axes)
-2.  and when you call ax.plot, it creates a Line2D instance and adds it
-    to the Axes.lines list.
-3.  remove lines by calling the list methods
+1.  `ax`是由`fig.add_subplot`创建的`Axes`实（注意，子图`Subplot`只是`Axes`的一个子类）
+2.  当使用了`ax.plot`时，它就会创建一个`Line2D`实例并加到`Axes.lines`列表中去。
+3.  可以通过调用`list`方法来删除`lines`。
 
 ## 控制对象
 
 ### 简介
 
-1.  Every element in the figure is represented by a matplotlib Artist,
-2.  and each has an extensive list of properties to configure its
-    appearance.
-3.  The figure itself contains a Rectangle exactly the size of the
-    figure, which you can use to set the background color and
-    transparency of the figures.
-4.  each Axes bounding box (the standard white box with black edges in
-    the typical matplotlib plot, has a Rectangle instance that
-    determines the color, transparency, and other properties of the
-    Axes.
-5.  These instances are stored as member variables `Figure.patch` and
-    `Axes.patch`.
+1.  图像中的每一个元素都由`matplotlib`表示。
+2.  每个元素都有用于配置外观的一系列的属性。
+3.  这个图像本身就作为一个`Rectangle`，可以调整图像大小，也可以设置背景颜色、透明度等等。
+4.  每个`Axes`的边界框（就是典型`matplotlib`图像中的白底黑边的框）都有一个`Rectangle`实例
+    来确定颜色、透明度以及其他的属性。
+5.  这些实例都作为变量存储在`Figure.patch`和`Axes.patch`中。
 
-### get Properties list
+### 获取属性列表
 
-1.  Every matplotlib Artist has many properties.
-2.  inspect the Artist properties is to use the
-    `matplotlib.artist.getp()` Function (simply `getp()` in pyplot),
-    which lists the properties and their values. This works for classes
-    derived from Artist as well, e.g., Figure and Rectangle.
+1.  每一个`Artists`都有很多属性。
+2.  查看`Artist`属性可以使用`matplotlib.artist.getp()`（在`pyplot`可以使用`getp()`）
+    它列举了所有的属性以及它们的设定值。这对于`Artist`衍生的类也是同样作用的，比如`Figure`和`Rectangle`。
 
 ``` {python}
 plt.getp(fig)
 plt.getp(ax)
 ```
 
-### get and set properties
+### 获取并设置属性
 
-1.  Each of the properties is accessed with an old-fashioned setter or
-    getter.
-2.  If you want to set a number of properties at once, you can also use
-    the set method with keyword arguments.
+1.  每个属性都可以使用旧式的设置器或者查看器得到。
+2.  如果你想要一次设置一堆属性的值，可以使用`set`方法来者是关键词变量。
 
 ``` {python, eval=F}
 a = line.get_alpha()
@@ -965,21 +940,15 @@ line.set(alpha=0.5, zorder=2)
 
 ## 对象容器
 
-### Figure container
+### 图像容器
 
-1.  The top level container Artist is the matplotlib.figure.Figure, and
-    it contains everything in the figure.
-2.  The background of the figure is a Rectangle which is stored in
-    Figure.patch.
-3.  As you add subplots (add~subplot~()) and axes (add~axes~()) to the
-    figure these will be appended to the Figure.axes.
-4.  Because the figure maintains the concept of the \"current axes\"
-    (see Figure.gca and Figure.sca) to support the pyplot state machine,
-    you should not insert or remove axes directly from the axes list,
-    but rather use the add~subplot~() and add~axes~() methods to insert,
-    and the delaxes() method to delete.
-5.  iterate over the list of axes or index into it to get access to Axes
-    instances you want to customize.
+1.  最顶层的容器`Artist`是`matplotlib.figure.Figure`，并且它包含了所有的图像中的东西。
+2.  图像的背景是一个`Rectangle`，存储在`Figure.patch`。
+3.  当你增加子图（`add_subplot()`）和坐标轴`add_axes()`时，它们也会被加到`Figure.axes`中。
+4.  因为图像保持了\"当前轴\"的概念，用来支持`pyplot/pylab`状态机，所以不能直接从轴列表
+    中插入或者删除轴。而是应该用`add_subplot()`或者`add_axes()`的方法插入，用`delaxes()`方法删除。
+5.  遍历轴列表，或者使用索引来访问想要自定义的`Axes`实例。
+
 
 ### 例子
 
@@ -990,40 +959,34 @@ ax1 = fig.add_subplot(211)
 ax2 = fig.add_axes([0.1, 0.1, 0.7, 0.3])
 print(fig.axes)
 
+#customize instance by iterating
 for ax in fig.axes:
     ax.grid(True)
 
 ```
 
-### Axes container
+### Axes容器
 
-1.  The matplotlib.axes.Axes is the center of the matplotlib universe.
-2.  it contains the vast majority of all the Artists used in a figure
-    with many helper methods to create and add these Artists to itself,
-    as well as helper methods to access and customize the Artists it
-    contains.
-3.  Like the Figure, it contains a Patch patch which is a Rectangle for
-    Cartesian coordinates and a Circle for polar coordinates;
-4.  this patch determines the shape, background and border of the
-    plotting region.
+1.  `matplotlib.axes.Axes`是`matplotlib`作图宇宙的中心。
+2.  它包含了绝大多数的，在图形中使用的`Artist`，并由很多的帮助方法，来创建、增加`Artist`对象。
+    同样的，也有很多的帮助方法用来获取、自定义已经包含的`Artist`对象。
+3.  跟图容器相似，轴容器包含了`Patch`补丁，一个`Rectangle`，来确定笛卡尔坐标跟极坐标系。
+4.  这个补丁用来确定绘图区域的形状、背景、边框。
+5.  注意，不要将`Axes`容器与`Axis`容器混合。`Axes`容器定义的是子图的作图区域，而`Axis`容器定义
+    的是坐标轴。
 
-### Axis containers
 
-1.  The matplotlib.axis.Axis instances handle the drawing of the tick
-    lines, the grid lines, the tick labels and the axis label.
-2.  You can configure the left and right ticks separately for the
-    y-axis, and the upper and lower ticks separately for the x-axis.
-3.  The Axis also stores the data and view intervals used in
-    auto-scaling, panning and zooming, as well as the Locator and
-    Formatter instances which control where the ticks are placed and how
-    they are represented as strings.
-4.  Each Axis object contains a label attribute (this is what pyplot
-    modifies in calls to xlabel() and ylabel()) as well as a list of
-    major and minor ticks.
-5.  The ticks are XTick and YTick instances, which contain the actual
-    line and text primitives that render the ticks and ticklabels.
-6.  access the lists of major and minor ticks through their accessor
-    methods get~majorticks~() and get~minorticks~().
+### Axis容器
+
+1.  `matplotlib.axis.Axis`实例可以处理网格线、刻度标签、标记、轴标签。
+2.  可以通过配置y轴左右两边的刻度，x轴上下两边的刻度。
+3.  `Axis`中同样存储数据以及视图的自动间隔、平移、缩放，以及`Locator`和`Formatter`
+    实例。这些实例用来控制比如文字型标签等刻度出现的位置以及表示为字符串的方法。
+4.  每个`Axis`对象都包含一个标签`label`属性（这就是`pyplot`调用`xlable()`和`ylabel()`
+    修改的对象），也有一系列的主要、次要的刻度列表。
+5.  这些刻度都是`XTick`和`YTick`实例，它们包含了用来渲染（也就是表现出）刻度、刻度标签
+    的真实的行和文本基元。
+6.  可以通过`get_majorticks()`和`get_minorticks()`方法来获取刻度列表。
 
 ### 例子
 
@@ -1037,17 +1000,15 @@ axis.get_ticklines()
 axis.get_ticklines(minor=True)
 ```
 
-1.  note there are twice as many ticklines as labels because by default
-    there are tick lines at the top and bottom but only tick labels
-    below the xaxis.
+1.  注意，刻度线的数量总是标签的两倍，一位内默认情况下，顶部和底部有刻度线，但
+    只有x轴下方有标签。
 
-### Tick containers
+### 刻度容器
 
-1.  The matplotlib.axis.Tick is the final container object in our
-    descent from the Figure to the Axes to the Axis to the Tick.
-2.  The Tick contains the tick and grid line instances, as well as the
-    label instances for the upper and lower ticks.
-3.  Each of these is accessible directly as an attribute of the Tick.
+1.  `matplotlib.axis.Tick`是我们的这一系列中，最后的容器对象。用下降的顺序表示，
+    就是`Figure->Axes->Axis->Tick`。
+2.  刻度容器包含了刻度、网格线，以及上下轴的标签实例。
+3.  这些都是可以直接在`Tick`中作为属性访问的。
 
 ### 例子
 
