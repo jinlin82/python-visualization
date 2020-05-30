@@ -494,17 +494,17 @@ plt.show()
 ### 面向对象 API 对比 Pyplot
 
 1.  `Matplotlib` 具有两种不同的接口. 第一种是面向对象的接口 (OO interface)
-    . 使用这种接口,我们创建并使用Axes类对象的实例.
-	从而利用Axes对象返回一个可视化效果于一个`Figure`类对象的实例上.
-2.  第二种基于Matlab,并使用一套基于状态的接口. 所有这些功能都被封装于Pyplot模块中供用户使用.
-3.  大多数术语与对象方法的名称都十分直接好懂,但仍然有一些需要注意:
-    1.  `Figure`是最终呈现的图像的对象,包含一个或多个`Axes`.
+    . 若要使用这种接口,我们需要创建并使用Axes类对象的实例.
+	从而利用Axes对象返回可视化效果于一个`Figure`类对象的实例上.
+2.  第二种基于Matlab,并使用一套基于状态(stated-based)的接口. 所有这些功能都被封装于Pyplot模块中供用户使用.
+3.  大多数术语与对象的方法的名称都十分直接好懂,但仍然有一些需要注意:
+    1.  `Figure`是最终呈现可是化效果的对象,包含一个或多个`Axes`.
     2.  每个`Axes`对象都代表一个独立的图 (别与 \"axis\"这个词混淆了, 这个指的是一个图的x/y座标轴).
     3.  我们直接调用Axes对象的方法来进行绘图,
-        这使得我们的自定义绘图的过程更加灵活与强大.
+        这使得我们自定义的绘图的过程更加灵活与强大.
 4.  总的来说,尽量使用面向对象接口而不是模块化的Pyplot来完成绘图.
 
-### 数据
+### 样例数据
 
 ``` {python}
 import numpy as np
@@ -531,8 +531,7 @@ group_mean = np.mean(group_data)
 
 ### Figure 与 axes
 
-1.  为了使用面向对象塞方式与之交互, 我们首先需要
-    生成一个Figure对象的实例.
+1.  为了使用面向对象塞方式与之交互, 我们首先需要生成一个Figure对象的实例.
 2.  `Figure` 对象如同一个画布, `Axes` 即是这个画布的一部分
     一个特定的可视化效果的一部分.
 3.  `Figures` 可以由多个`Axes`堆叠组成.
@@ -588,7 +587,7 @@ plt.setp(labels, rotation=45, horizontalalignment='right')
 
 1.  让Matplotlib自动为我们在Figure对象上创建的元素留出空间.
 2.  为了做到这些我们需要设置rcParams对象的自动布局(autolayout)参数的数值.
-/
+
 ``` {python}
 plt.rcParams.update({'figure.autolayout': True})
 
@@ -598,10 +597,10 @@ labels = ax.get_xticklabels()
 plt.setp(labels, rotation=45, horizontalalignment='right')
 ```
 
-1.  给图像添加标签(label).若要用用面向对象接口, 
+1.  若要用面向对象接口给图像添加标签(label), 
 	我们可以使用`axes.Axes.set()`这个方法 去设置这些 `Axes` 对象的属性.
 2.  用`pyplot.subplots()`函数更改图的大小.
-    我们可以通过修改figsize这个关键词参数(\*\*kwrag)来实现.
+    我们可以通过设置`figsize`这个关键词参数(\*\*kwrag)来实现.
 3.  对于标签(label), 我们可以通过使用函数选择自定义的标识栏,使用`ticker.FuncFormatter`方法来完成你的修改.
 
 ### 修改绘图
@@ -658,7 +657,7 @@ plt.show()
 
 ### 保存绘图结果
 
-1.  在Matplotlib中,我们可以把绘图结果保存成多种文件格式. 若你想了解那些格式可用,可以使用以下函数查看:
+1.  在Matplotlib中,我们可以把绘图结果保存成多种文件格式. 若你想了解哪些格式可用,可以使用以下函数查看:
 
 ``` {python}
 print(fig.canvas.get_supported_filetypes())
@@ -668,7 +667,7 @@ print(fig.canvas.get_supported_filetypes())
 2.  这里有几个有用的参数:
     1.  `transparent=True` 如果保存的格式允许,这个参数会将保存图片的背景变为透明.
     2.  `dpi=80` 控制输出图像的分辨率 (每英尺块中像素点的数量) .
-    3.  `bbox~inches~=\"tight\"` 选择保存图像的边界拟合方式
+    3.  `bbox~inche~s="tight"` 选择被保存图像的边界拟合方式
 
 ``` {python}
 fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
@@ -683,7 +682,7 @@ fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
 1.  样式包提供了方便的图像样式转换功能,并使用与`matplotlib rc`文件相同的参数
 	(`matplotlib rc`文件在启动时被读取用于设置matplotlib).
 2. 	Matplotlib提供了很多预先定义好的样式.举个例子,其中一个样式名为\"ggplot\"
-	能模拟ggplot的包的美学风格(ggplot是一个用于R语言的十分流行的绘图包).
+	能模拟ggplot包的美学风格(ggplot是一个用于R语言的十分流行的绘图包).
 
 ``` {python}
 import numpy as np
@@ -693,7 +692,7 @@ plt.style.use('ggplot')
 data = np.random.randn(50)
 ```
 
-1.  要查看所有可用样式: `print(plt.style.available)`
+1. 若要查看所有可用样式,使用`print(plt.style.available)`
 
 ### 定义自定义样式
 
@@ -702,10 +701,10 @@ data = np.random.randn(50)
 
 ### 样式组合
 
-1.  样式文件本就是被设计为组合在一起使用的.
+1.  样式文件本就是被设计用来组合在一起使用的.
 2.  所以你可以用一个样式文件设定颜色,并用另一个样式文件去设定展示文件的元素大小.
 3.  这些样式很容易被组合,你仅需要传入一个由样式组成的列表即可:
-4.  注意,左侧定义的样式(如果与右侧的样式有冲突)会被右侧的样式覆盖(冲突的部分).
+4.  注意,左侧定义的样式(如果与右侧中定义的样式有冲突)则会被右侧的样式覆盖(冲突的部分).
 
 ``` {python}
 # plt.style.use(['dark_background', 'presentation'])
@@ -713,9 +712,9 @@ data = np.random.randn(50)
 
 ### 临时样式
 
-1.  如果你想为指定的一块代码使用特定的样式,但又不希望改动全局样式,你可以使用style
-	包提供的内容管理器去限制你的修改,让他作用与于一个特定的词法作用域内.使用如
-	下的代码去将你的样式修改独立出来
+1.  如果你想为指定的一块代码使用特定的样式,但又不希望改动全局样式,你可以使用`style`
+	包提供的内容管理器去限制你的修改,让他作用于一个特定的词法作用域内.使用如
+	下的代码去将你的样式修改独立出来.
 
 ``` {python}
 with plt.style.context('dark_background'):
@@ -726,12 +725,12 @@ plt.show()
 
 ## rcParams 参数
 
-### 动态的 rc 设置
+### 动态设置rc 参数
 
 1.  你也可以动态的通过Python脚本修改默认的 rc 文件设置,亦或是通过交互式Python终端来完成.
-2.  所有的 rc 文件设置(参数)都被存储与一个类似_字典_的数据中,名叫`matplotlib.rcParams`,这个变量
+2.  所有的 rc 文件设置(参数)都被存储与一个类似_字典_类型的变量中,名叫`matplotlib.rcParams`,这个变量
 	对于matplotlib是一个全局变量.
-3.  rcParams可以被直接修改,如下:
+3.  rcParams也可以被直接修改,如下:
 
 ``` {python}
 mpl.rcParams['lines.linewidth'] = 2
@@ -740,7 +739,7 @@ plt.plot(data)
 
 ```
 
-### 动态的 rc 设置
+### 动态设置 rc 参数
 
 1.  Matplotlib也提供了两个方便的函数用于修改rc设置.
 	`matplotlib.rc()`命令可以使用关键词参数(\*\*kwarg)修改多个设置于一个括号内.
@@ -754,11 +753,11 @@ plt.plot(data)
 
 ### matplotlibrc 文件
 
-1.  matplotlib使用matplotlibrc 配置文件来设置各种属性,我们称之为rc 设置或rc 参数.
+1.  matplotlib使用`matplotlibrc`配置文件来设置各种属性,我们称之为rc 设置或rc 参数.
 2.  你可以控制Matplotlib几乎所有的默认数值:
 	图像大小,分辨率,行高,颜色和样式,axes,座标轴,网格参数,文本与字体属性等等.
-3.  当一个matplotlibrc文件被找到,其他的matplotlibrc文件的路径便不再被搜索.
-4.  用以下方法查看哪个文件路径下的matplotlibrc文件被加载了:
+3.  当一个matplotlibrc文件被找到,其他的matplotlibrc文件路径便不再被搜索.
+4.  用以下方法查看哪个文件路径下的`matplotlibrc`文件被加载了:
 
 ``` {python}
 import matplotlib
