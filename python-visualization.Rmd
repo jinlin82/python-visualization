@@ -491,25 +491,20 @@ plt.show()
 
 # 面向对象API
 
-### the Object-Oriented API vs Pyplot
+### 面向对象 API 对比 Pyplot
 
-1.  Matplotlib has two interfaces. The first is an object-oriented (OO)
-    interface. In this case, we utilize an instance of axes.Axes in
-    order to render visualizations on an instance of figure.Figure.
-2.  The second is based on MATLAB and uses a state-based interface. This
-    is encapsulated in the pyplot module.
-3.  Most of the terms are straightforward but the main thing to remember
-    is that:
-    1.  The Figure is the final image that may contain 1 or more Axes.
-    2.  The Axes represent an individual plot (don\'t confuse this with
-        the word \"axis\", which refers to the x/y axis of a plot).
-    3.  We call methods that do the plotting directly from the Axes,
-        which gives us much more flexibility and power in customizing
-        our plot.
-4.  In general, try to use the object-oriented interface over the pyplot
-    interface.
+1.  Matplotlib 具有两种不同的接口. 第一种是面向对象的接口 (OO interface)
+    . 使用这种接口,我们创建并使用Axes类对象的实例.
+	从而利用Axes对象返回一个可视化效果于一个Figure类对象的实例上.
+2.  第二种基于Matlab,并使用一套基于状态的接口. 所有这些功能都被封装于Pyplot模块中供用户使用.
+3.  大多数术语与对象方法的名称都十分直接好懂,但仍然有一些需要注意:
+    1.  Figure是最终呈现的图像的对象,包含一个或多个Axes.
+    2.  每个Axes对象都代表一个独立的图 (别与 \"axis\"这个词混淆了, 这个指的是一个图的x/y座标轴).
+    3.  我们直接调用Axes对象的方法来进行绘图,
+        这使得我们的自定义绘图的过程更加灵活与强大.
+4.  总的来说,尽量使用面向对象接口而不是模块化的Pyplot来完成绘图.
 
-### data
+### 数据
 
 ``` {python}
 import numpy as np
@@ -534,45 +529,44 @@ group_mean = np.mean(group_data)
 
 ```
 
-### Figure and axes
+### Figure 与 axes
 
-1.  To do this with the object-oriented approach, we\'ll first generate
-    an instance of figure.Figure and axes.Axes.
-2.  The Figure is like a canvas, and the Axes is a part of that canvas
-    on which we will make a particular visualization.
-3.  Figures can have multiple axes on them.
+1.  为了使用面向对象塞方式与之交互, 我们首先需要
+    生成一个Figure对象的实例.Figure 与 axes.Axes.
+2.  Figure 对象如同一个画布, Axes 即是这个画布的一部分
+    一个特定的可视化效果的一部分.
+3.  Figures 可以由多个Axes堆叠组成.
 
 ``` {python}
 fig, ax = plt.subplots()
 ```
 
-1.  Now that we have an Axes instance, we can plot on top of it.
+1.  现在有了Axes实例, 我们便可在其上开始绘制图像.
 
 ``` {python}
 ax.barh(group_names, group_data)
 ```
 
-### Controlling the style
+### 控制样式
 
-1.  There are many styles available in Matplotlib in order to let you
-    tailor your visualization to your needs. To see a list of styles, we
-    can use:
+1.  Matplotlib中提供了多种样式,帮助你依照需求修改,完善你的可视化效果
+    我们可以使用以下的方法查看可用的样式:
 
 ``` {python}
 print(plt.style.available)
 ```
 
-1.  You can activate a style with the following:
+1.  用以下方法启用一个样式:
 
 ``` {python}
 plt.style.use('ggplot')
 ```
 
-### Customizing the plot
+### 修改绘图
 
-1.  rotate the labels on the x-axis so that they show up more clearly.
-2.  We can gain access to these labels with the
-    axes.Axes.get~xticklabels~() method:
+1.  旋转X轴上的标签(label)使得可视化效果更清晰.
+2.  我们可以通过以下方法来控制标签(label)
+    axes.Axes.get~xticklabels~():
 
 ``` {python}
 fig, ax = plt.subplots()
@@ -580,10 +574,8 @@ ax.barh(group_names, group_data)
 labels = ax.get_xticklabels()
 ```
 
-1.  If we\'d like to set the property of many items at once, it\'s
-    useful to use the pyplot.setp() function.
-2.  This will take a list (or many lists) of Matplotlib objects, and
-    attempt to set some style element of each one.
+1.  如果我们一次想设置多个属性, 可以使用pyplot.setp()函数.
+2.  该函数接受一个或多个Matplotlib objects属性的列表, 并尝试为每个对象设置相应的样式元素.
 
 ``` {python}
 fig, ax = plt.subplots()
@@ -592,12 +584,11 @@ labels = ax.get_xticklabels()
 plt.setp(labels, rotation=45, horizontalalignment='right')
 ```
 
-### Customizing the plot
+### 修改绘图
 
-1.  tell Matplotlib to automatically make room for elements in the
-    figures that we create.
-2.  To do this we\'ll set the autolayout value of our rcParams.
-
+1.  让atplotlib自动为我们在Figure对象上创建的元素留出空间.
+2.  为了做到这些我们需要设置rcParams对象的自动布局(autolayout)参数的数值.
+/
 ``` {python}
 plt.rcParams.update({'figure.autolayout': True})
 
@@ -607,14 +598,13 @@ labels = ax.get_xticklabels()
 plt.setp(labels, rotation=45, horizontalalignment='right')
 ```
 
-1.  add labels to the plot. To do this with the OO interface, we can use
-    the axes.Axes.set() method to set properties of this Axes object.
-2.  adjust the size of this plot using the pyplot.subplots() function.
-    We can do this with the figsize kwarg.
-3.  For labels, we can specify custom formatting guidelines in the form
-    of functions by using the ticker.FuncFormatter class.
+1.  给图像添加标签(label).若要用用面向对象接口, 
+	我们可以使用axes.Axes.set()这个方法 去设置这些 Axes 对象的属性.
+2.  用pyplot.subplots()函数更改图的大小.
+    我们可以通过修改figsize这个关键词参数(**kwrag)来实现.
+3.  对于标签(label), 我们可以通过使用函数选择自定义的标识栏,使用ticker.FuncFormatter类来完成你的修改.
 
-### Customizing the plot
+### 修改绘图
 
 ``` {python}
 def currency(x, pos):
@@ -637,14 +627,12 @@ ax.set(xlim=[-10000, 140000], xlabel='Total Revenue', ylabel='Company',
 ax.xaxis.set_major_formatter(formatter)
 ```
 
-### Combining multiple visualizations
+### 多个可视化效果组合
 
-1.  It is possible to draw multiple plot elements on the same instance
-    of axes.Axes.
-2.  To do this we simply need to call another one of the plot methods on
-    that axes object.
+1.  我们可以将多个绘图元素绘制于同一axes.Axes类的实例中.
+2.  要做到这些,我们仅需要调用这个axes对象中的绘图方法即可.
 
-### Combining multiple visualizations
+### 多个可视化效果组合
 
 ``` {python, eval=F}
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -664,27 +652,23 @@ ax.set(xlim=[-10000, 140000], xlabel='Total Revenue', ylabel='Company',
 ax.xaxis.set_major_formatter(formatter)
 ax.set_xticks([0, 25e3, 50e3, 75e3, 100e3, 125e3])
 fig.subplots_adjust(right=.1)
+# 错误参数 right != 0.1 because left can't >= right
 plt.show()
 ```
 
-### Saving plots
+### 保存绘图结果
 
-1.  There are many file formats we can save to in Matplotlib. To see a
-    list of available options, use:
+1.  在Matplotlib中,我们可以把绘图结果保存成多种文件格式. 若你想了解那些格式可用,可以使用以下函数查看:
 
 ``` {python}
 print(fig.canvas.get_supported_filetypes())
 ```
 
-1.  We can then use the figure.Figure.savefig() in order to save the
-    figure to disk.
-2.  Note that there are several useful flags:
-    1.  transparent=True makes the background of the saved figure
-        transparent if the format supports it.
-    2.  dpi=80 controls the resolution (dots per square inch) of the
-        output.
-    3.  bbox~inches~=\"tight\" fits the bounds of the figure to our
-        plot.
+1.  我们可以使用figure.Figure.savefig() 这一方法将我们的图像存储于硬盘中.
+2.  这里有几个有用的参数:
+    1.  transparent=True 如果保存的格式允许,这个参数会将保存图片的背景变为透明.
+    2.  dpi=80 控制输出图像的分辨率 (每英尺块中像素点的数量) .
+    3.  bbox~inches~=\"tight\" 选择保存图像的边界拟合方式
 
 ``` {python}
 fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
@@ -694,15 +678,12 @@ fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
 
 ## 样式表单
 
-### Using style sheets
+### 使用样式表
 
-1.  The style package adds support for easy-to-switch plotting
-    \"styles\" with the same parameters as a `matplotlib rc` file (which
-    is read at startup to configure matplotlib).
-2.  There are a number of pre-defined styles provided by Matplotlib. For
-    example, there\'s a pre-defined style called \"ggplot\", which
-    emulates the aesthetics of ggplot (a popular plotting package for
-    R).
+1.  样式包提供了方便的图像样式转换功能,并使用与`matplotlib rc`文件相同的参数
+	(`matplotlib rc`文件在启动时被读取用于设置matplotlib).
+2. 	Matplotlib提供了很多预先定义好的样式.举个例子,其中一个样式名为\"ggplot\"
+	能模拟ggplot的包的美学风格(ggplot是一个用于R语言的十分流行的绘图包).
 
 ``` {python}
 import numpy as np
@@ -712,35 +693,30 @@ plt.style.use('ggplot')
 data = np.random.randn(50)
 ```
 
-1.  To list all available styles, use: `print(plt.style.available)`
+1.  要查看所有可用样式: `print(plt.style.available)`
 
-### Defining your own style
+### 定义自定义样式
 
-1.  You can create custom styles and use them by calling style.use with
-    the path or URL to the style sheet.
-2.  Additionally, if you add your \<style-name\>.mplstyle file to
-    mpl~configdir~/stylelib, you can reuse your custom style sheet with
-    a call to style.use(\<style-name\>).
+1.  你可以创建自定义样式,并通过调用style.use函数并加上样式文件的URL或文件路径来调用之.
+2.  并且,如果你将你的\<style-name\>.mplstyle 样式文件添加到
+    mpl~configdir~/stylelib文件夹下, 你可以直接使用style.use(\<style-name\>)去重复调用你的样式文件.
 
-### Composing styles
+### 样式组合
 
-1.  Style sheets are designed to be composed together.
-2.  So you can have a style sheet that customizes colors and a separate
-    style sheet that alters element sizes for presentations.
-3.  These styles can easily be combined by passing a list of styles:
-4.  Note that styles further to the right will overwrite values that are
-    already defined by styles on the left.
+1.  样式文件本就是被设计为组合在一起使用的.
+2.  所以你可以用一个样式文件设定颜色,并用另一个样式文件去设定展示文件的元素大小.
+3.  这些样式很容易被组合,你仅需要传入一个由样式组成的列表即可:
+4.  注意,左侧定义的样式(如果与右侧的样式有冲突)会被右侧的样式覆盖(冲突的部分).
 
 ``` {python}
 # plt.style.use(['dark_background', 'presentation'])
 ```
 
-### Temporary styling
+### 临时样式
 
-1.  use a style for a specific block of code but don\'t want to change
-    the global styling, the style package provides a context manager for
-    limiting your changes to a specific scope. To isolate your styling
-    changes, you can write something like the following:
+1.  如果你想为指定的一块代码使用特定的样式,但又不希望改动全局样式,你可以使用style
+	包提供的内容管理器去限制你的修改,让他作用与于一个特定的词法作用域内.使用如
+	下的代码去将你的样式修改独立出来
 
 ``` {python}
 with plt.style.context('dark_background'):
@@ -751,14 +727,15 @@ plt.show()
 
 ## rcParams 参数
 
-### Dynamic rc settings
+### 动态的 rc 设置
 
-1.  You can also dynamically change the default rc settings in a python
-    script or interactively from the python shell.
+1.  你也可以动态的通过Python脚本修改默认的 rc 文件设置,亦或是通过交互式Python终端来完成.
 2.  All of the rc settings are stored in a dictionary-like variable
     called matplotlib.rcParams, which is global to the matplotlib
-    package.
-3.  rcParams can be modified directly, for example:
+    package
+	所有的 rc 文件设置(参数)都被存储与一个类似_字典_的数据中,名叫matplotlib.rcParams,这个变量
+	对于matplotlib是一个全局变量.
+3.  rcParams可以被直接修改,如下:
 
 ``` {python}
 mpl.rcParams['lines.linewidth'] = 2
@@ -767,33 +744,25 @@ plt.plot(data)
 
 ```
 
-### Dynamic rc settings
+### 动态的 rc 设置
 
-1.  Matplotlib also provides a couple of convenience functions for
-    modifying rc settings. The matplotlib.rc() command can be used to
-    modify multiple settings in a single group at once, using keyword
-    arguments.
-2.  The matplotlib.rcdefaults() command will restore the standard
-    matplotlib default settings.
-3.  There is some degree of validation when setting the values of
-    rcParams, see matplotlib.rcsetup for details.
+1.  Matplotlib也提供了两个方便的函数用于修改rc设置.
+	matplotlib.rc()命令可以使用关键词参数(**kwarg)修改多个设置于一个括号内.
+2.  matplotlib.rcdefaults()命令会存储标准的,默认的matplotlib设置参数.
+3.  设置rcParams的数值时,会有一定程度的验证措施,请参阅matplotlib.rcsetup了解更多.
 
 ``` {python}
 mpl.rc('lines', linewidth=4, color='g')
 plt.plot(data)
 ```
 
-### The matplotlibrc file
+### matplotlibrc 文件
 
-1.  matplotlib uses matplotlibrc configuration files to customize all
-    kinds of properties, which we call rc settings or rc parameters.
-2.  You can control the defaults of almost every property in matplotlib:
-    figure size and dpi, line width, color and style, axes, axis and
-    grid properties, text and font properties and so on.
-3.  Once a matplotlibrc file has been found, it will not search any of
-    the other paths.
-4.  To display where the currently active matplotlibrc file was loaded
-    from, one can do the following:
+1.  matplotlib使用matplotlibrc 配置文件来设置各种属性,我们称之为rc 设置或rc 参数.
+2.  你可以控制Matplotlib几乎所有的默认数值:
+	图像大小,分辨率,行高,颜色和样式,axes,座标轴,网格参数,文本与字体属性等等.
+3.  当一个matplotlibrc文件被找到,其他的matplotlibrc文件的路径便不再被搜索.
+4.  用以下方法查看哪个文件路径下的matplotlibrc文件被加载了:
 
 ``` {python}
 import matplotlib
