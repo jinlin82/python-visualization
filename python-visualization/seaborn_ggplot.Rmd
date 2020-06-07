@@ -40,7 +40,28 @@ library(reticulate)
 - [x] seaborn
 - [x] ggplot
 
-python代码
+# seaborn introduction
+Seaborn is a library for making statistical graphics in Python. 
+It is built on top of matplotlib and closely integrated with pandas data structures.
+
+Here is some of the functionality that seaborn offers:
+1.A dataset-oriented API for examining relationships between multiple variables
+
+2.Specialized support for using categorical variables to show observations or aggregate statistics
+
+3.Options for visualizing univariate or bivariate distributions and for comparing them between subsets of data
+
+4.Automatic estimation and plotting of linear regression models for different kinds dependent variables
+
+5.Convenient views onto the overall structure of complex datasets
+
+6.High-level abstractions for structuring multi-plot grids that let you easily build complex visualizations
+
+7.Concise control over matplotlib figure styling with several built-in themes
+
+8.Tools for choosing color palettes that faithfully reveal patterns in your data
+
+Seaborn aims to make visualization a central part of exploring and understanding data. Its dataset-oriented plotting functions operate on dataframes and arrays containing whole datasets and internally perform the necessary semantic mapping and statistical aggregation to produce informative plots.
 
 ```{python, results='markup'}
 
@@ -51,9 +72,9 @@ python图形
 
 ```{python}
 import matplotlib.pyplot as plt
-import seaborn as sbn
+import seaborn as sns
 from ggplot import *
-plt.plot([0,1])
+
 ```
 
 # 使用说明
