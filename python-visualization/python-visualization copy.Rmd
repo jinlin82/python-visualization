@@ -231,33 +231,26 @@ plt.show()
 
 ## Pyplot 简介
 
-### Intro to pyplot
+### pyplot入门
 
-1.  `matplotlib.pyplot` is a collection of command style functions that
-    make matplotlib work like MATLAB.
-2.  Each pyplot function makes some change to a figure: e.g., creates a
-    figure, creates a plotting area in a figure, plots some lines in a
-    plotting area, decorates the plot with labels, etc.
-3.  In `matplotlib.pyplot` various states are preserved across function
-    calls, so that it keeps track of things like the current figure and
-    plotting area, and the plotting functions are directed to the
-    current axes.
-4.  \"axes\" here and in most places in the documentation refers to the
-    axes part of a figure and not the strict mathematical term for more
-    than one axis.
+1.  `matplotlib.pyplot` 是命令样式函数的集合，它使matplotlib像MATLAB一样
+     工作。
+2.  每个pyplot函数对图进行一些更改:例如，创建一个图，在图中创建一个标绘区域，
+    在标绘区域中绘制一些线，用标签装饰图，等等。
+3.  在 `matplotlib.pyplot` 的各种状态在函数调用之间保持不变，以便跟踪当前图
+    形和绘图区域等信息，绘图函数被定向到当前轴。
+4.  \"axes\" “坐标轴”在这里和文档中的大多数地方指的是图形的坐标轴部分，而不是
+     用于多个轴的严格的数学术语。
 
-### Formatting the style of your plot
+### plot的标准化格式
 
-1.  For every x, y pair of arguments, there is an optional third
-    argument which is the format string that indicates the color and
-    line type of the plot.
-2.  The letters and symbols of the format string are from MATLAB, and
-    you concatenate a color string with a line style string.
-3.  The default format string is `'b-'` , which is a solid blue line.
-    For example, to plot the above with red circles, use `'ro'` .
-4.  The `axis()` command in the example above takes a list of
-    `[xmin, xmax, ymin, ymax]` and specifies the viewport of the axes.
-
+1.  对于每一对x、y参数，都有一个可选的第三个参数参数，它是指示颜色和的格式字
+    符串情节的线条类型。
+2.  格式字符串的字母和符号来自MATLAB，您可以将一个颜色字符串与一个线条样式字
+    符串连接起来。
+3.  默认格式字符串是“b-' '，它是一条实线。例如，用“ro’”来绘制上面的红色圆圈。
+4.  上面示例中的`axis()`命令接受一个`[xmin, xmax, ymin, ymax]`的列表并指
+    定轴的视口。
 ``` {python}
 import matplotlib.pyplot as plt
 plt.plot([1, 2, 3, 4], [1, 4, 9, 16], 'ro')
@@ -266,12 +259,11 @@ plt.show()
 
 ```
 
-### use numpy arrays
+### 使用 numpy arrays
 
-1.  matplotlib uses numpy arrays.
-2.  In fact, all sequences are converted to numpy arrays internally.
-3.  The example below illustrates a plotting several lines with
-    different format styles in one command using arrays.
+1.  matplotlib使用numpy数组
+2.  实际上，所有序列都在内部转换为numpy数组
+3.  下面的示例演示了如何绘制几行代码使用数组的一个命令中的不同格式样式
 
 ``` {python}
 import numpy as np
@@ -284,15 +276,12 @@ plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
 plt.show()
 ```
 
-### Plotting with keyword strings
+### 使用关键字字符串绘图
 
-1.  There are some instances where you have data in a format that lets
-    you access particular variables with strings.
-2.  For example, `pandas.DataFrame`.
-3.  Matplotlib allows you provide such an object with the `data` keyword
-    argument.
-4.  If provided, then you may generate plots with the strings
-    corresponding to these variables.
+1.  在某些情况下，数据的格式允许使用字符串访问特定的变量。
+2.  例如, `pandas.DataFrame`.
+3.  Matplotlib允许您使用“data”这样的关键字提供对象。
+4.  可以使用字符串生成绘图对应于这些变量。
 
 ``` {python}
 data = {'a': np.arange(50),
@@ -307,10 +296,10 @@ plt.ylabel('entry b')
 plt.show()
 ```
 
-### Plotting with categorical variables
+### 用分类变量作图
 
-1.  Matplotlib allows you to pass categorical variables directly to many
-    plotting functions.
+1.  Matplotlib允许直接将分类变量传递给多个变量
+    绘图功能。
 
 ``` {python}
 names = ['group_a', 'group_b', 'group_c']
@@ -330,30 +319,27 @@ plt.show()
 
 ## 线条属性
 
-### Controlling line properties
+### 控制线条属性
 
-1.  Lines have many attributes that you can set: linewidth, dash style,
-    antialiased, etc; see matplotlib.lines.Line2D.
-2.  There are several ways to set line properties:
-    1.  Use keyword args: `plt.plot(x, y, linewidth=2.0)`
-    2.  Use the setter methods of a Line2D instance. plot returns a list
-        of Line2D objects; e.g., line1, line2 = plot(x1, y1, x2, y2). In
-        the code below we will suppose that we have only one line so
-        that the list returned is of length 1. We use tuple unpacking
-        with line, to get the first element of that list:
+1.  行有许多属性可以设置:linewidth, dash style,antialiased等; 
+    see matplotlib.lines.Line2D.
+2.  有几种方法来设置线属性:
+    1.  使用关键字参数: `plt.plot(x, y, linewidth=2.0)`
+    2.  使用Line2D实例的setter方法。plot返回一个列表Line2D对象;例如，
+        line1, line2 = plot(x1, y1, x2, y2)。在
+        下面的代码我们假设只有一行返回的列表长度为1。我们使用元组解包，
+        以获取该列表的第一个元素:
 
 ``` {python, eval=F}
 line, = plt.plot(x, y, '-')
 line.set_antialiased(False) # turn off antialiasing
 ```
 
-### Controlling line properties
+### 控制线条属性
 
-1.  Use the `setp()` command. The example below uses a MATLAB-style
-    command to set multiple properties on a list of lines. setp works
-    transparently with a list of objects or a single object. You can
-    either use python keyword arguments or MATLAB-style string/value
-    pairs.
+1.  使用 `setp()` 命令。下面的示例使用的是matlab样式命令在行列表中
+    设置多个属性。setp的作品透明地使用对象列表或单个对象。你可以要么
+    使用python关键字参数，要么使用matlab样式的字符串/值。
 
 ``` {python, eval=F}
 lines = plt.plot(x1, y1, x2, y2)
@@ -373,16 +359,13 @@ plt.setp(lines)
 
 ## 多个图形和坐标系
 
-### Working with multiple figures and axes
+### 处理多个图形和轴
 
-1.  pyplot has the concept of the current figure and the current axes.
-2.  All plotting commands apply to the current axes.
-3.  The function `gca()` returns the current axes (a
-    matplotlib.axes.Axes instance),
-4.  and `gcf()` returns the current figure (matplotlib.figure.Figure
-    instance).
-5.  Normally, you don\'t have to worry about this, because it is all
-    taken care of behind the scenes.
+1.  pyplot具有当前图形和当前轴的概念
+2.  所有绘图命令都应用于当前轴。函数`gca()`返回当前轴(a
+    matplotlib.axes.Axes 实例),
+3.   `gcf()` 返回当前图形 (matplotlib.figure.Figure 实例).
+4.  通常情况下，你不必担心这个，因为已经在后台被安排。
 
 ``` {python}
 def f(t):
@@ -398,21 +381,17 @@ plt.plot(t2, np.cos(2*np.pi*t2), 'r--')
 plt.show()
 ```
 
-### Working with multiple figures and axes
+### 处理多个图形和轴
 
-1.  The figure() command here is optional because figure(1) will be
-    created by default, just as a subplot(111) will be created by
-    default if you don\'t manually specify any axes.
-2.  The subplot() command specifies numrows, numcols, plot~number~ where
-    plot~number~ ranges from 1 to numrows\*numcols.
-3.  The commas in the subplot command are optional if
-    numrows\*numcols\<10. So subplot(211) is identical to subplot(2, 1,
-    1).
-4.  create multiple figures by using multiple figure() calls with an
-    increasing figure number.
-5.  clear the current figure with clf() and the current axes with cla().
-6.  the memory required for a figure is not completely released until
-    the figure is explicitly closed with close().
+1.  在这里使用figure()命令是可选的，因为图(1)将在默认情况下创建，
+    如果不手动指定任何轴，则在默认情况下将创建subplot(111)一样，具有多个图形和轴。
+2.  subplot()命令指定numrows、numcols和plot_number
+    plot_number的范围从1到numrows\*numcols。
+3.  如果numrows\*numcols\<10如果numrows\*numcols\<10, subplot命令中的逗号是可选的。
+    所以(211)和(2,1,1)是一样的。
+4.  使用多个figure()调用来创建多个图形。
+5.  用clf()清除当前图，用cla()清除当前轴。
+6.  图形所需的内存直到完全释放才会释放该图是用close()显式关闭的。
 
 ### 例子
 
@@ -437,14 +416,12 @@ plt.title('Easy as 1, 2, 3') # subplot 211 title
 Working with text
 -----------------
 
-### Working with text
+### 使用文本
 
-1.  The text() command can be used to add text in an arbitrary location,
-2.  and the xlabel(), ylabel() and title() are used to add text in the
-    indicated locations.
-3.  All of the text() commands return an matplotlib.text.Text instance.
-4.  Just as with with lines above, you can customize the properties by
-    passing keyword arguments into the text functions or using setp():
+1.  text() 命令可以用来在任意位置增加文本
+2.  xlabel(), ylabel() 和 title() 用于在指定的位置添加文本。
+3.  所有的text()命令返回一个matplotlib.text 文本实例。
+4.  与上面的代码行一样，您可以通过传递关键字参数到文本函数或使用setp():
 
 ``` {python}
 t = plt.xlabel('my data', fontsize=14, color='red')
@@ -470,33 +447,29 @@ plt.show()
 
 ```
 
-### Using mathematical expressions in text
+### 在文本中使用数学表达式
 
-1.  matplotlib accepts TeX equation expressions in any text expression.
+1.  matplotlib在任何文本表达式中接受TeX方程表达式。
 
 ``` {python}
 plt.title(r'$\sigma_i=15$')
 ```
 
-1.  The r preceding the title string is important -- it signifies
-    that the string is a raw string and not to treat backslashes as
-    python escapes.
-2.  matplotlib has a built-in TeX expression parser and layout engine,
-    and ships its own math fonts. Thus you can use mathematical text
-    across platforms without requiring a TeX installation.
-3.  For those who have LaTeX and dvipng installed, you can also use
-    LaTeX to format your text and incorporate the output directly into
-    your display figures or saved postscript
+1.  标题字符串前面的r很重要——它表示该字符串是一个原始字符串，不应将反斜杠视为
+    未使用python.
+2.  matplotlib有一个内置的TeX表达式解析器和布局引擎
+    并提供自己的数学字体。因此可以使用数学文本跨平台而不需要TeX安装
+3.  对于那些已经安装了LaTeX和dvipng的用户，也可以使用它LaTeX可以格式化文本并
+    直接将输出合并到其中您的显示数字或保存的postscript
 
-### Annotating text
+### 注释文本
 
-1.  A common use for text is to annotate some feature of the plot, and
-    the annotate() method provides helper functionality to make
-    annotations easy.
-2.  In an annotation, there are two points to consider:
-    1.  the location being annotated represented by the argument xy
-    2.  and the location of the text xytext.
-    3.  Both of these arguments are (x,y) tuples.
+1.  文本的一个常见用法是注释情节的一些特性annotate()方法提供了辅助功能
+    可以进行简单的注释
+2.  在注释中，有两点需要考虑:
+    1.  被标注的位置由参数xy表示
+    2.  以及文本xytext的位置
+    3.  这两个参数都是(x,y)元组
 
 ### 例子
 
@@ -517,25 +490,20 @@ plt.show()
 
 # 面向对象API
 
-### the Object-Oriented API vs Pyplot
+### 面向对象 API 对比 Pyplot
 
-1.  Matplotlib has two interfaces. The first is an object-oriented (OO)
-    interface. In this case, we utilize an instance of axes.Axes in
-    order to render visualizations on an instance of figure.Figure.
-2.  The second is based on MATLAB and uses a state-based interface. This
-    is encapsulated in the pyplot module.
-3.  Most of the terms are straightforward but the main thing to remember
-    is that:
-    1.  The Figure is the final image that may contain 1 or more Axes.
-    2.  The Axes represent an individual plot (don\'t confuse this with
-        the word \"axis\", which refers to the x/y axis of a plot).
-    3.  We call methods that do the plotting directly from the Axes,
-        which gives us much more flexibility and power in customizing
-        our plot.
-4.  In general, try to use the object-oriented interface over the pyplot
-    interface.
+1.  `Matplotlib` 具有两种不同的接口. 第一种是面向对象的接口 (OO interface)
+    . 若要使用这种接口,我们需要创建并使用Axes类对象的实例.
+	从而利用Axes对象返回可视化效果于一个`Figure`类对象的实例上.
+2.  第二种基于Matlab,并使用一套基于状态(stated-based)的接口. 所有这些功能都被封装于Pyplot模块中供用户使用.
+3.  大多数术语与对象的方法的名称都十分直接好懂,但仍然有一些需要注意:
+    1.  `Figure`是最终呈现可是化效果的对象,包含一个或多个`Axes`.
+    2.  每个`Axes`对象都代表一个独立的图 (别与 \"axis\"这个词混淆了, 这个指的是一个图的x/y座标轴).
+    3.  我们直接调用Axes对象的方法来进行绘图,
+        这使得我们自定义的绘图的过程更加灵活与强大.
+4.  总的来说,尽量使用面向对象接口而不是模块化的Pyplot来完成绘图.
 
-### data
+### 样例数据
 
 ``` {python}
 import numpy as np
@@ -560,45 +528,43 @@ group_mean = np.mean(group_data)
 
 ```
 
-### Figure and axes
+### Figure 与 axes
 
-1.  To do this with the object-oriented approach, we\'ll first generate
-    an instance of figure.Figure and axes.Axes.
-2.  The Figure is like a canvas, and the Axes is a part of that canvas
-    on which we will make a particular visualization.
-3.  Figures can have multiple axes on them.
+1.  为了使用面向对象塞方式与之交互, 我们首先需要生成一个Figure对象的实例.
+2.  `Figure` 对象如同一个画布, `Axes` 即是这个画布的一部分
+    一个特定的可视化效果的一部分.
+3.  `Figures` 可以由多个`Axes`堆叠组成.
 
 ``` {python}
 fig, ax = plt.subplots()
 ```
 
-1.  Now that we have an Axes instance, we can plot on top of it.
+1.  现在有了`Axes`实例, 我们便可在其上开始绘制图像.
 
 ``` {python}
 ax.barh(group_names, group_data)
 ```
 
-### Controlling the style
+### 控制样式
 
-1.  There are many styles available in Matplotlib in order to let you
-    tailor your visualization to your needs. To see a list of styles, we
-    can use:
+1.  Matplotlib中提供了多种样式,帮助你依照需求修改,完善你的可视化效果
+    我们可以使用以下的方法查看可用的样式:
 
 ``` {python}
 print(plt.style.available)
 ```
 
-1.  You can activate a style with the following:
+1.  用以下方法启用一个样式:
 
 ``` {python}
 plt.style.use('ggplot')
 ```
 
-### Customizing the plot
+### 修改绘图
 
-1.  rotate the labels on the x-axis so that they show up more clearly.
-2.  We can gain access to these labels with the
-    axes.Axes.get~xticklabels~() method:
+1.  旋转X轴上的标签(label)使得可视化效果更清晰.
+2.  我们可以通过以下方法来控制标签(label)
+    `axes.Axes.get~xticklabels~()`:
 
 ``` {python}
 fig, ax = plt.subplots()
@@ -606,10 +572,8 @@ ax.barh(group_names, group_data)
 labels = ax.get_xticklabels()
 ```
 
-1.  If we\'d like to set the property of many items at once, it\'s
-    useful to use the pyplot.setp() function.
-2.  This will take a list (or many lists) of Matplotlib objects, and
-    attempt to set some style element of each one.
+1.  如果我们一次想设置多个属性, 可以使用`pyplot.setp()`函数.
+2.  该函数接受一个或多个由Matplotlib对象的属性组成的列表, 并尝试为每个对象设置相应的样式元素.
 
 ``` {python}
 fig, ax = plt.subplots()
@@ -618,11 +582,10 @@ labels = ax.get_xticklabels()
 plt.setp(labels, rotation=45, horizontalalignment='right')
 ```
 
-### Customizing the plot
+### 修改绘图
 
-1.  tell Matplotlib to automatically make room for elements in the
-    figures that we create.
-2.  To do this we\'ll set the autolayout value of our rcParams.
+1.  让Matplotlib自动为我们在Figure对象上创建的元素留出空间.
+2.  为了做到这些我们需要设置rcParams对象的自动布局(autolayout)参数的数值.
 
 ``` {python}
 plt.rcParams.update({'figure.autolayout': True})
@@ -633,14 +596,13 @@ labels = ax.get_xticklabels()
 plt.setp(labels, rotation=45, horizontalalignment='right')
 ```
 
-1.  add labels to the plot. To do this with the OO interface, we can use
-    the axes.Axes.set() method to set properties of this Axes object.
-2.  adjust the size of this plot using the pyplot.subplots() function.
-    We can do this with the figsize kwarg.
-3.  For labels, we can specify custom formatting guidelines in the form
-    of functions by using the ticker.FuncFormatter class.
+1.  若要用面向对象接口给图像添加标签(label), 
+	我们可以使用`axes.Axes.set()`这个方法 去设置这些 `Axes` 对象的属性.
+2.  用`pyplot.subplots()`函数更改图的大小.
+    我们可以通过设置`figsize`这个关键词参数(\*\*kwrag)来实现.
+3.  对于标签(label), 我们可以通过使用函数选择自定义的标识栏,使用`ticker.FuncFormatter`方法来完成你的修改.
 
-### Customizing the plot
+### 修改绘图
 
 ``` {python}
 def currency(x, pos):
@@ -663,14 +625,12 @@ ax.set(xlim=[-10000, 140000], xlabel='Total Revenue', ylabel='Company',
 ax.xaxis.set_major_formatter(formatter)
 ```
 
-### Combining multiple visualizations
+### 多个可视化效果组合
 
-1.  It is possible to draw multiple plot elements on the same instance
-    of axes.Axes.
-2.  To do this we simply need to call another one of the plot methods on
-    that axes object.
+1.  我们可以将多个绘图元素绘制于同一`axes.Axes`类的实例中.
+2.  要做到这些,我们仅需要调用这个`axes`对象中的绘图方法即可.
 
-### Combining multiple visualizations
+### 多个可视化效果组合
 
 ``` {python, eval=F}
 fig, ax = plt.subplots(figsize=(8, 8))
@@ -690,27 +650,23 @@ ax.set(xlim=[-10000, 140000], xlabel='Total Revenue', ylabel='Company',
 ax.xaxis.set_major_formatter(formatter)
 ax.set_xticks([0, 25e3, 50e3, 75e3, 100e3, 125e3])
 fig.subplots_adjust(right=.1)
+# 错误参数 right != 0.1 because left can't >= right
 plt.show()
 ```
 
-### Saving plots
+### 保存绘图结果
 
-1.  There are many file formats we can save to in Matplotlib. To see a
-    list of available options, use:
+1.  在Matplotlib中,我们可以把绘图结果保存成多种文件格式. 若你想了解哪些格式可用,可以使用以下函数查看:
 
 ``` {python}
 print(fig.canvas.get_supported_filetypes())
 ```
 
-1.  We can then use the figure.Figure.savefig() in order to save the
-    figure to disk.
-2.  Note that there are several useful flags:
-    1.  transparent=True makes the background of the saved figure
-        transparent if the format supports it.
-    2.  dpi=80 controls the resolution (dots per square inch) of the
-        output.
-    3.  bbox~inches~=\"tight\" fits the bounds of the figure to our
-        plot.
+1.  我们可以使用`figure.Figure.savefig()`这一方法将我们的图像存储于硬盘中.
+2.  这里有几个有用的参数:
+    1.  `transparent=True` 如果保存的格式允许,这个参数会将保存图片的背景变为透明.
+    2.  `dpi=80` 控制输出图像的分辨率 (每英尺块中像素点的数量) .
+    3.  `bbox~inche~s="tight"` 选择被保存图像的边界拟合方式
 
 ``` {python}
 fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
@@ -720,15 +676,12 @@ fig.savefig('sales.png', transparent=False, dpi=80, bbox_inches="tight")
 
 ## 样式表单
 
-### Using style sheets
+### 使用样式表
 
-1.  The style package adds support for easy-to-switch plotting
-    \"styles\" with the same parameters as a `matplotlib rc` file (which
-    is read at startup to configure matplotlib).
-2.  There are a number of pre-defined styles provided by Matplotlib. For
-    example, there\'s a pre-defined style called \"ggplot\", which
-    emulates the aesthetics of ggplot (a popular plotting package for
-    R).
+1.  样式包提供了方便的图像样式转换功能,并使用与`matplotlib rc`文件相同的参数
+	(`matplotlib rc`文件在启动时被读取用于设置matplotlib).
+2. 	Matplotlib提供了很多预先定义好的样式.举个例子,其中一个样式名为\"ggplot\"
+	能模拟ggplot包的美学风格(ggplot是一个用于R语言的十分流行的绘图包).
 
 ``` {python}
 import numpy as np
@@ -738,35 +691,29 @@ plt.style.use('ggplot')
 data = np.random.randn(50)
 ```
 
-1.  To list all available styles, use: `print(plt.style.available)`
+1. 若要查看所有可用样式,使用`print(plt.style.available)`
 
-### Defining your own style
+### 定义自定义样式
 
-1.  You can create custom styles and use them by calling style.use with
-    the path or URL to the style sheet.
-2.  Additionally, if you add your \<style-name\>.mplstyle file to
-    mpl~configdir~/stylelib, you can reuse your custom style sheet with
-    a call to style.use(\<style-name\>).
+1.  你可以创建自定义样式,并通过调用style.use函数并加上样式文件的URL或文件路径来调用之.
+2.  并且,如果你将你的\<style-name\>.mplstyle 样式文件添加到了`mpl~configdir~/stylelib`文件夹下, 你便可以直接使用`style.use(\<style-name\>)`去重复调用你的样式文件.
 
-### Composing styles
+### 样式组合
 
-1.  Style sheets are designed to be composed together.
-2.  So you can have a style sheet that customizes colors and a separate
-    style sheet that alters element sizes for presentations.
-3.  These styles can easily be combined by passing a list of styles:
-4.  Note that styles further to the right will overwrite values that are
-    already defined by styles on the left.
+1.  样式文件本就是被设计用来组合在一起使用的.
+2.  所以你可以用一个样式文件设定颜色,并用另一个样式文件去设定展示文件的元素大小.
+3.  这些样式很容易被组合,你仅需要传入一个由样式组成的列表即可:
+4.  注意,左侧定义的样式(如果与右侧中定义的样式有冲突)则会被右侧的样式覆盖(冲突的部分).
 
 ``` {python}
 # plt.style.use(['dark_background', 'presentation'])
 ```
 
-### Temporary styling
+### 临时样式
 
-1.  use a style for a specific block of code but don\'t want to change
-    the global styling, the style package provides a context manager for
-    limiting your changes to a specific scope. To isolate your styling
-    changes, you can write something like the following:
+1.  如果你想为指定的一块代码使用特定的样式,但又不希望改动全局样式,你可以使用`style`
+	包提供的内容管理器去限制你的修改,让他作用于一个特定的词法作用域内.使用如
+	下的代码去将你的样式修改独立出来.
 
 ``` {python}
 with plt.style.context('dark_background'):
@@ -777,14 +724,12 @@ plt.show()
 
 ## rcParams 参数
 
-### Dynamic rc settings
+### 动态设置rc 参数
 
-1.  You can also dynamically change the default rc settings in a python
-    script or interactively from the python shell.
-2.  All of the rc settings are stored in a dictionary-like variable
-    called matplotlib.rcParams, which is global to the matplotlib
-    package.
-3.  rcParams can be modified directly, for example:
+1.  你也可以动态的通过Python脚本修改默认的 rc 文件设置,亦或是通过交互式Python终端来完成.
+2.  所有的 rc 文件设置(参数)都被存储与一个类似_字典_类型的变量中,名叫`matplotlib.rcParams`,这个变量
+	对于matplotlib是一个全局变量.
+3.  rcParams也可以被直接修改,如下:
 
 ``` {python}
 mpl.rcParams['lines.linewidth'] = 2
@@ -793,33 +738,25 @@ plt.plot(data)
 
 ```
 
-### Dynamic rc settings
+### 动态设置 rc 参数
 
-1.  Matplotlib also provides a couple of convenience functions for
-    modifying rc settings. The matplotlib.rc() command can be used to
-    modify multiple settings in a single group at once, using keyword
-    arguments.
-2.  The matplotlib.rcdefaults() command will restore the standard
-    matplotlib default settings.
-3.  There is some degree of validation when setting the values of
-    rcParams, see matplotlib.rcsetup for details.
+1.  Matplotlib也提供了两个方便的函数用于修改rc设置.
+	`matplotlib.rc()`命令可以使用关键词参数(\*\*kwarg)修改多个设置于一个括号内.
+2.  matplotlib.rcdefaults()命令会存储标准的,默认的matplotlib设置参数.
+3.  设置rcParams的数值时,会有一定程度的验证措施,请参阅`matplotlib.rcsetup`了解更多.
 
 ``` {python}
 mpl.rc('lines', linewidth=4, color='g')
 plt.plot(data)
 ```
 
-### The matplotlibrc file
+### matplotlibrc 文件
 
-1.  matplotlib uses matplotlibrc configuration files to customize all
-    kinds of properties, which we call rc settings or rc parameters.
-2.  You can control the defaults of almost every property in matplotlib:
-    figure size and dpi, line width, color and style, axes, axis and
-    grid properties, text and font properties and so on.
-3.  Once a matplotlibrc file has been found, it will not search any of
-    the other paths.
-4.  To display where the currently active matplotlibrc file was loaded
-    from, one can do the following:
+1.  matplotlib使用`matplotlibrc`配置文件来设置各种属性,我们称之为rc 设置或rc 参数.
+2.  你可以控制Matplotlib几乎所有的默认数值:
+	图像大小,分辨率,行高,颜色和样式,axes,座标轴,网格参数,文本与字体属性等等.
+3.  当一个matplotlibrc文件被找到,其他的matplotlibrc文件路径便不再被搜索.
+4.  用以下方法查看哪个文件路径下的`matplotlibrc`文件被加载了:
 
 ``` {python}
 import matplotlib
@@ -1029,6 +966,7 @@ for tick in ax.yaxis.get_major_ticks():
 plt.show()
 ```
 
+
 # 图例
 
 ### 三种用法
@@ -1037,14 +975,24 @@ plt.show()
 2.  `legend(labels)`
 3.  `legend(handles, labels)`
 
-### 自动检测要显示到图例的元素
+### Automatic detection of elements to be shown in the legend(自动检测元素添加到
+图例中)
 
-1.  当不输入任何额外参数时，将自动确定要添加到图例中的元素。
-2.  在这种情况下，标签来自于artist。
-3.  可以在创建artist时指定它们，也可以通过调用set_label
-    （）函数的方法指定它们。
-4.  通过定义以下划线开头的标签，可以从自动图例元素选择中排除特定线。
-5.  这是所有artist的默认设置，因此调用Axes.legend如果不使用任何参数，也不手动设置标签，则不会绘制图例。
+1.  The elements to be added to the legend are automatically determined,
+    when you do not pass in any extra arguments.（当没有选择额外参数时，将自动确
+    定要添加到图例的元素）
+2.  In this case, the labels are taken from the artist.（在这种情况下，标签来自
+于美学映射）
+3.  You can specify them either at artist creation or by calling the
+    set~label~() method on the artist.（可以在创建美学映射时指定，也可以通过调用
+   set_label()函数的方法）
+4.  Specific lines can be excluded from the automatic legend element
+    selection by defining a label starting with an underscore.（通过定义以下划线
+   开头的标签可以从自动图例元素中排除特定的线）
+5.  This is default for all artists, so calling Axes.legend without any
+    arguments and without setting the labels manually will result in no
+    legend being drawn.（这是默认设置，所以当没有手动设置标签直接调用
+    Axes.legend()函数将不会显示任何图例）
 
 ### 例子
 
@@ -1058,12 +1006,16 @@ plt.legend()
 
 ```
 
-### 标记现有的绘图元素
+### Labeling existing plot elements（标记现有的绘图元素）
 
-1.  要为已经存在于轴上的线创建图例（例如通过绘图），只需调用
-    plt.legend()函数，并给每个图例项一个字符串。
-2.  注意：不鼓励使用这种方法，因为通过它们的顺序确定绘图元
-    素和标签之间的关系是隐晦的，很容易搞混乱。
+1.  To make a legend for lines which already exist on the axes (via plot
+    for instance), simply call this function with an iterable of
+    strings, one for each legend item.（为已有的线制作图例（通过绘图，例如）简单
+    调用plt.legend()函数，为每一条线指定一个标签字符串）
+2.  Note: This way of using is discouraged, because the relation between
+    plot elements and labels is only implicit by their order and can
+    easily be mixed up.（注意：不鼓励使用这种方法，因为通过它们的顺序确定绘图元
+    素和标签之间的关系是隐晦的，很容易搞混乱）
 
 ``` {python}
 plt.plot([1, 2, 3])
@@ -1071,16 +1023,19 @@ plt.legend(['A simple line'])
 
 ```
 
-### 显示定义图例中的元素
+### Explicitly defining the elements in the legend（明确定义图例中的元素）
 
-1.  对于完全控制哪些artist有一个图例条目， 
-    可以顺序地在每一个artist后面设置一个图例标签。
+1.  For full control of which artists have a legend entry, it is
+    possible to pass an iterable of legend artists followed by an
+    iterable of legend labels respectively.（为了完全控制每一条线有一个图例，可
+    以通过指定一个可迭代的图例标签给要需要添加到图例上的线）
 
 `legend((line1, line2, line3), ('label1', 'label2', 'label3'))`
 
-1.  参数:
-    1.  loc : 图例的坐标位置. \'best\'
-    2.  bbox~toanchor~: Box是和loc一起使用去确定图例的坐标。
+1.  Parameters:
+    1.  loc : The location of the legend. \'best\'
+    2.  bbox~toanchor~: Box that is used to position the legend in
+        conjunction with loc.
     3.  fontsize
 
 ### 例子
@@ -1109,19 +1064,28 @@ plt.show()
 
 # 紧缩输出和限定输出
 
-### 紧缩输出
+### Tight Layout
 
-1.  紧缩输出自动调整子图参数，以便子图适
-    合于图形区域。
-2.  紧缩输出只考虑刻度
-    标签、轴标签和标题。因此，其他的artist可能被剪裁也可能重叠。
-3.  紧缩输出的替代方案是限定输出。
-4.  为了防止这种情况发生，轴的位
-    置需要被调整，对于子图，可以调整子图参数完成（移动轴的边缘为刻度标签腾出空间）。
-5.  tight_layout()函数会自动调整。
-6.  注意到只用当函数被调用时才会调整子图的参数。
-7.  为了每次重新绘制图形时执行该操作，可以调
-    用函数fig.set_tight_layout(True)，或者设置plt.rcParams['figure.autolayout']=True。
+1.  tight~layout~ automatically adjusts subplot params so that the
+    subplot(s) fits in to the figure area.(紧缩输出自动调整子图参数，以便子图适
+    合于图形区域)
+2.  tight~layout~() only considers ticklabels, axis labels, and titles.
+    Thus, other artists may be clipped and also may overlap.（紧缩输出只考虑刻度
+    标签、轴标签和标题。因此，其他的美学映射可能被剪裁也可能重叠。）
+3.  An alternative to tight~layout~ is constrained~layout~.（紧缩输出的另一种选择
+是限定输出）
+4.  To prevent this, the location of axes needs to be adjusted. For
+    subplots, this can be done by adjusting the subplot params (Move the
+    edge of an axes to make room for tick labels).（为了防止这种情况发生，轴的位
+    置需要被调整，对于子图，可以调整子图参数完成（移动轴的边缘为刻度标签腾出空间））
+5.  `tight_layout()` that does this automatically for you.（tight_layout()函数自
+动执行）
+6.  Note that `matplotlib.pyplot.tight_layout()` will only adjust the
+    subplot params when it is called.（注意到只用被调用时才会调整子图的参数）
+7.  In order to perform this adjustment each time the figure is redrawn,
+    you can call `fig.set_tight_layout(True)`, or, equivalently, set the
+    figure.autolayout rcParam to True.（为了每次重新绘制图形时执行该操作，可以调
+    用函数fig.set_tight_layout(True)，或者用plt.rcParams['figure.autolayout']=True）
 
 ### 例子
 
@@ -1147,12 +1111,17 @@ example_plot(ax, fontsize=24)
 plt.tight_layout()
 ```
 
-### 多个子块
+### multiple subplots(多个子图)
 
-1.  当有多个子块时，经常会看到不同轴的标签相互重叠。
-2.  tight_layout()也可以调整不同子图之间的空间，尽量减
-    少出现重叠的情况。
-3.  即使子块的大小在网格规范兼容的范围内是不同的，tight_layout()也可以工作。
+1.  When you have multiple subplots, often you see labels of different
+    axes overlapping each other.（当有多个子图时，通常会出现不同坐标轴的标签互相重叠
+   的情况）
+2.  tight~layout~() will also adjust spacing between subplots to
+    minimize the overlaps.（tight_layout()函数也可以调整不同子图之间的空间尽量减
+    少出现重叠的情况）
+3.  tight~layout~() will work even if the sizes of subplots are
+    different as far as their grid specification is compatible.（tight_layout()
+    函数对不同大小的子图也同样起作用，只要网格条件是兼容的）
 
 ### 例子
 
@@ -1171,17 +1140,25 @@ example_plot(ax3)
 plt.tight_layout()
 ```
 
-### 限定输出
+### Constrained Layout
 
-1.  constrained_layout()自动调整子
-    块和修饰，如图例和颜色条，以便它们适合体形窗口，同时尽可能保留用户请求的逻辑布
-    局。
-2.  constrained_layout()和tight_layout()相似，不过用了一个约束解算器用于确
-    定轴的大小。
-3.  constrained_layout()需要先被激活，在
-    添加任何轴到图形前。有两种方法：
-    1.  使用各自的参数到子图或者图形，例如plt.subplots(constrained_layout=True)。
-    2.  通过rcParams激活，设置plt.rcParams['figure.constrained_layout.use'] = True。
+1.  constrained~layout~ automatically adjusts subplots and decorations
+    like legends and colorbars so that they fit in the figure window
+    while still preserving, as best they can, the logical layout
+    requested by the user.（constrained_layout()函数自动调整子图、图例和颜色条，
+   以便适合图形窗口，但是仍尽可能的保留逻辑布局）
+2.  constrained~layout~ is similar to tight~layout~, but uses a
+    constraint solver to determine the size of axes that allows them to
+    fit.（constrained_layout()和tight_layout()相似，不过用了一个约束解算器用于确
+    定轴的大小）
+3.  constrained~layout~ needs to be activated before any axes are added
+    to a figure. Two ways of doing so are（constrained_layout()需要先被激活，在
+    添加任何轴到图形前。有两种方法：）
+    1.  using the respective argument to subplots() or figure(), e.g.:
+        `plt.subplots(constrained_layout=True)`（使用各自的参数到子图或者图形，例如plt.subplots(constrained_layout=True)）
+    2.  activate it via rcParams, like:
+        `plt.rcParams['figure.constrained_layout.use'] = True`（通过rcParams激
+        活，设置plt.rcParams['figure.constrained_layout.use'] = True）
 
 ### 例子
 
@@ -1453,17 +1430,26 @@ plt.show()
 
 # mplot3d工具箱
 
-### mplot3d和MayaVi有何不同？
+### How is mplot3d different from MayaVi?（mplot3d和MayaVi有何不同）
 
-1.  MayaVi2是一个非常强大和功能强大的三维图形库。对于高级3D场景和出色的渲染功
-    能，强烈建议使用MayaVi2。
-2.  mplot3d的目的是允许用户创建与matplotlib的2D图具有相同“外观”的简单3D图。
-    此外，用户可以使用他们已经熟悉的相同工具包来生成他们的二维和三维绘图。
+1.  MayaVi2 is a very powerful and featureful 3D graphing library. For
+    advanced 3D scenes and excellent rendering capabilities, it is
+    highly recommended to use MayaVi2.（MayaVi2是一个非常有用功能丰富的3D会图
+    库。有先进的3D图像和优秀的渲染能力，强力推荐使用MayaVi2）
+2.  mplot3d was intended to allow users to create simple 3D graphs with
+    the same \"look-and-feel\" as matplotlib\'s 2D plots. Furthermore,
+    users can use the same toolkit that they are already familiar with
+    to generate both their 2D and 3D plots.（mplot3d旨在允许用户使用与
+    matplotlib's 2D plots有相同外观和感觉的简单3D图形，用户可以使用他们已经熟悉
+    的生成2D和3D图的工具包toolkit）
 
-### `Axes3D` 对象
+### `Axes3D` object
 
-1.  使用“projection=‘3d’”关键字创建Axes3D对象，就像创建任何其他轴一样。
-2.  新建一个画布(matplotlib.figure)并在其中添加一个Axes3D类型的新轴
+1.  An Axes3D object is created just like any other axes using the
+    `projection='3d'` keyword.（创建一个Axes3D对象和其他轴一样，使用
+    `projection='3d'`这样的关键字）
+2.  Create a new matplotlib.figure.Figure and add a new axes to it of
+    type Axes3D:（创建一个新的画布并添加新的坐标轴）
 
 ``` {python}
 import matplotlib.pyplot as plt
@@ -1500,44 +1486,54 @@ plt.show()
 ### 支持的 3D 图形类型
 
 1.  <https://matplotlib.org/tutorials/toolkits/mplot3d.html#sphx-glr-tutorials-toolkits-mplot3d-py>
-2.  线形图：
-    `Axes3D.plot(self, xs, ys, *args, zdir='z', **kwargs)`
-3.  散点图：
+2.  Line plots： `Axes3D.plot(self, xs, ys, *args, zdir='z', **kwargs)`
+3.  Scatter plots：
     `Axes3D.scatter(self, xs, ys, zs=0, zdir='z', s=20, c=None, depthshade=True, *args, **kwargs)`
-4.  线框图：
+4.  Wireframe plots：
     `Axes3D.plot_wireframe(self, X, Y, Z, *args, **kwargs)`
-5.  曲面图：
+5.  Surface plots：
     `Axes3D.plot_surface(self, X, Y, Z, *args, norm=None, vmin=None, vmax=None, lightsource=None, **kwargs)`
-6.  三维曲面图：
+6.  Tri-Surface plots：
     `Axes3D.plot_trisurf(self, *args, color=None, norm=None, vmin=None, vmax=None, lightsource=None, **kwargs)`
-7.  等高线图：
+7.  Contour plots：
     `Axes3D.contour(self, X, Y, Z, *args, extend3d=False, stride=5, zdir='z', offset=None, **kwargs)`
 
 ### 支持的 3D 图形类型
 
-8.  填充等高线图：
+1.  Filled contour plots：
     `Axes3D.contourf(self, X, Y, Z, *args, zdir='z', offset=None, **kwargs)`
-9.  多边形图：
-    `Axes3D.add_collection3d(self, col, zs=0, zdir='z')`
-10.  条形图：
+2.  Polygon plots： `Axes3D.add_collection3d(self, col, zs=0, zdir='z')`
+3.  Bar plots：
     `Axes3D.bar(self, left, height, zs=0, zdir='z', *args, **kwargs)`
-11.  绘制箭头：
+4.  Quiver：
     `Axes3D.quiver(X, Y, Z, U, V, W, /, length=1, arrow_length_ratio=.3, pivot='tail', normalize=False, **kwargs)`
-12.  添加文本：
-    `Axes3D.text(self, x, y, z, s, zdir=None, **kwargs)`
-13.  子图：
-    在一个图形中有多个3D图与2D图相同。此外，还可以在同一图形中同时绘制二维和三维图形。
+5.  2D plots in 3D
+6.  Text： `Axes3D.text(self, x, y, z, s, zdir=None, **kwargs)`
+7.  Subplotting：Having multiple 3D plots in a single figure is the same
+    as it is for 2D plots. Also, you can have both 2D and 3D plots in
+    the same figure.
 
 ### 其他常见作图包
 
-1.  Pandas：Pandas对于绘制简单的图形比较方便，但是你需要先愿意学习matplotlib。
-2.  Seaborn：可以支持更复杂的可视化方法，但是仍然需要matplotlib的知
-    识去支撑，它的配色方案不错。
-3.  ggplot：ggplot是一个基于R中ggplot2的Python绘图系统及图形语法，它是为了让研究人员看起来用最少的代码快速绘图。
-4.  Bokeh：Bokeh是现代web浏览器的交互式可视化库，它提供了优雅、简
-    洁的多功能图形构建，以及提供大型或主流的高性能的交互性数据库。
-5.  Mayavi：在Python中进行3D科学数据可视化和绘制。
-6.  Turtle graphics：是向孩子们介绍编程的一种流行方式。
+1.  Pandas is handy for simple plots but you need to be willing to learn
+    matplotlib to customize.（Pandas对于简单的情况比较方便，但是你需要愿意去学习matplotlib）
+2.  Seaborn can support some more complex visualization approaches but
+    still requires matplotlib knowledge to tweak. The color schemes are
+    a nice bonus.（Seaborn可以支持更复杂的可视化方法，但是仍然需要matplotlib的知
+    识去支撑，它的颜色主题部分很好用）
+3.  ggplot ggplot is a plotting system for Python based on R\'s ggplot2
+    and the Grammar of Graphics. It is built for making profressional
+    looking, plots quickly with minimal code.（ggplot是一个基于R中ggplot2的Python
+    绘图系统及图形语法，它是为了让研究人员看起来用最少的代码快速绘图）
+4.  Bokeh is an interactive visualization library for modern web
+    browsers. It provides elegant, concise construction of versatile
+    graphics, and affords high-performance interactivity over large or
+    streaming datasets.（ Bokeh是现代web浏览器的交互式可视化库，它提供了优雅、简
+    洁的多功能图形构建，以及提供大型或主流的高性能的交互性数据库）
+5.  Mayavi: 3D scientific data visualization and plotting in Python.（Mayavi使用
+Python进行科学数据可视化和绘制）
+6.  Turtle graphics is a popular way for introducing programming to
+    kids.（Turtle graphics是向孩子们介绍编程的一种流行方式）
 
 
 # 参考文献
