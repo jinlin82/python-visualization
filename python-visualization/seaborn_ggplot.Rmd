@@ -68,7 +68,6 @@ Seaborn aims to make visualization a central part of exploring and understanding
 
 ```
 
-python图形
 
 ```{python}
 import matplotlib.pyplot as plt
@@ -77,33 +76,62 @@ from ggplot import *
 
 ```
 
-# 使用说明
+```{python}
 
-R输出表格
-
-```{r, results='markup'}
-knitr::kable(head(trees))
 ```
+# ggplot 应用
 
-python 表格输出
+## geom_abline用法
 
-```{python, results='markup'}
+```{python}
+from ggplot import *
 import pandas as pd
-dat=pd.DataFrame([[1,2,3],[3,4,6]])
+# argument
+#intercept	截距
+#slope	斜率
+#color  颜色
+#size	宽度
+mtcars=pd.read_csv("./data/mtcars.csv")
+ggplot(mtcars,aes(x='wt',y='mpg')) + geom_point() +geom_abline(intercept=37,slope=-5,colour="red",size=10)#颜色存在问题
 ```
-
-
-```{r eval=T, results='markup'}
-knitr::kable(py$dat)
+## geom_now_its_art
+```{python}
+ggplot(mtcars, aes('wt', 'mpg')) + geom_point() +ggtitle("Not Art")
+ggplot(mtcars, aes('wt', 'mpg')) + geom_now_its_art() +ggtitle("Art!")
+# not useful but beautiful
 ```
+## scale_color_brewer
+```{python}
+import numpy as np
+import pandas as pd
+from ggplot import *
+import matplotlib.pyplot as plt
+# type	颜色种类 Sequential (seq) | Qualitative (qual) | Diverging (div)
+#palette 颜色组合 http://colorbrewer2.org/ for more details.
 
-行内公式 $\alpha+\hat{\beta}$ 。
+ggplot(aes(x='wt', y='hp'), data=mtcars) +geom_point() +scale_color_brewer(type='qual')
+#diamonds数据集下载？
+```
+## theme
 
-行间公式
+```{python}
+theme_bw
+theme_gray
+theme_matplotlib
+theme_seaborn
+theme_xkcd
+```
+## scale_color_gradient2
 
-$$\bar x = \sum_{i=1}^n x_i +\bar y$$
+```{python}
+#low	Color for low end of gradient.
+#high	Color for high end of gradient.
+p = ggplot(aes(x='x', y='y', color='abs(x - y)'), data=dsub.head(1000)) + geom_point() + scale_colour_gradient2(low="steelblue", high="black")
 
-$$X \sim  N(0,1)$$
+ggplot(aes(x='x', y='y', color='abs(x - y)'), data=dsub.head(1000)) + geom_point() + scale_colour_gradient2(low="yellow", high="red")
+
+# dsub数据集下载 颜色显示？
+```
 
 
 # 参考文献
