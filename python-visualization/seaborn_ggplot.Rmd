@@ -41,6 +41,7 @@ library(reticulate)
 - [x] ggplot
 
 # seaborn introduction
+
 Seaborn is a library for making statistical graphics in Python. 
 It is built on top of matplotlib and closely integrated with pandas data structures.
 
@@ -63,22 +64,66 @@ Here is some of the functionality that seaborn offers:
 
 Seaborn aims to make visualization a central part of exploring and understanding data. Its dataset-oriented plotting functions operate on dataframes and arrays containing whole datasets and internally perform the necessary semantic mapping and statistical aggregation to produce informative plots.
 
-```{python, results='markup'}
-
-
-```
-
+## example
 
 ```{python}
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-from ggplot import *
-
+sns.set()#默认主题
+tips = pd.read_csv('./data/tips.csv')
+sns.relplot(x="total_bill", y="tip", col="time",hue="smoker", style="smoker", size="size",data=tips)
+```
+```{python}
+dots = pd.read_csv("./data/dots.csv")
+sns.relplot(x="time", y="firing_rate", col="align",hue="choice", size="coherence", style="choice",facet_kws=dict(sharex=False),kind="line", legend="full", data=dots)
 ```
 
 ```{python}
-
+fmri = sns.load_dataset("fmri") #统计误差
+sns.relplot(x="timepoint", y="signal", col="region",
+            hue="event", style="event",
+            kind="line", data=fmri)
 ```
+
+## lmplot 回归&点
+
+```{python}
+sns.lmplot(x="total_bill", y="tip", col="time", hue="smoker",data=tips)
+```
+
+## catplot
+
+```{python}
+sns.catplot(x="day", y="total_bill", hue="smoker",kind="swarm", data=tips)
+```
+```{python}
+sns.catplot(x="day", y="total_bill", hue="smoker",kind="violin", split=True, data=tips)
+```
+```{python}
+sns.catplot(x="day", y="total_bill", hue="smoker",kind="bar", data=tips)
+```
+
+## Figure-level and axes-level functions 多图
+
+```{python}
+import matplotlib.pyplot as plt#结合matplotlib
+f, axes = plt.subplots(1, 2, sharey=True, figsize=(6, 4))
+sns.boxplot(x="day", y="tip", data=tips, ax=axes[0])
+sns.scatterplot(x="total_bill", y="tip", hue="day", data=tips, ax=axes[1])
+```
+
+## jointplot 中间散点两边直方图
+
+```{python}
+iris = pd.read_csv("./data/iris.csv")
+sns.jointplot(x="sepal_length", y="petal_length", data=iris)
+```
+```{python}
+sns.pairplot(data=iris, hue="species")
+```
+
+
 # ggplot 应用
 
 ## geom_abline用法
@@ -111,10 +156,9 @@ import pandas as pd
 from ggplot import *
 import matplotlib.pyplot as plt
 # type	颜色种类 Sequential (seq) | Qualitative (qual) | Diverging (div)
-#palette 颜色组合 http://colorbrewer2.org/ for more details.
+# palette 颜色组合 http://colorbrewer2.org/ for more details.
 
 ggplot(aes(x='wt', y='hp'), data=mtcars) +geom_point() +scale_color_brewer(type='qual')
-#diamonds数据集下载？
 ```
 
 ## theme
