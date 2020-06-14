@@ -1,0 +1,524 @@
+---
+title: "Python Visualization"
+author: "Tanting"
+date: "2020年6月"
+institute: 中南财经政法大学统计与数学学院
+csl: ./style/chinese-gb7714-2015-numeric.csl
+css: ./style/markdown.css
+bibliography: [./Bibfile.bib]
+eqnPrefixTemplate: ($$i$$)
+link-citations: true
+linkReferences: true
+chapters: true
+tableEqns: false
+autoEqnLabels: false
+classoption: "aspectratio=1610"
+---
+
+```{r setup, echo=F, purl=F}
+knitr::opts_knit$set(root.dir = getwd())
+knitr::opts_chunk$set(echo = TRUE, results = 'hide')
+knitr::opts_chunk$set(warning = FALSE, message=FALSE)
+knitr::opts_chunk$set(fig.align="center"
+                      ## ,out.width="0.9\\textwidth" # latex
+                      ,out.width="90%" # for both latex and html
+                      ,fig.width=5, fig.height=3
+                      )
+```
+
+```{r prepare, echo=F, purl=F}
+rm(list=ls())
+options(digits=4)
+options(scipen=100)
+graphics.off()
+Sys.setlocale("LC_ALL", "Chinese")
+library(reticulate)
+```
+# Mayavi概述
+
+### 简介
+
+1.  力求提供3D数据或3D绘图的轻松且交互式的可视化。
+2.  在2维和3维中可视化标量和矢量数据。
+3.  使用Python轻松编写脚本。
+4.  通过自定义源、模块和数据过滤器轻松扩展。
+5.  读取几种文件格式：VTK（旧版和XML），PLOT3D等。
+6.  保存可视化。
+7.  以多种图像格式保存渲染的可视化。
+8.  通过mlab进行快速科学绘图的便捷功能（请参阅：https://docs.enthought.com/mayavi/mayavi/mlab.html#simple-scripting-with-mlab)。
+   
+### 使用Mayavi作为应用程序还是库
+
+作为用户，有三种使用Mayavi的主要方法：
+1.  以图形方式使用该应用程序。请参见：https://docs.enthought.com/mayavi/mayavi/application.html#using-the-mayavi-application
+2.  从简单的Python脚本（例如Ipython）与numpy结合使用Mayavi作为绘图引擎。该mlab脚本API提供了在批处理脚本中使用Mayavi的一个简单的方法，请参见：https://docs.enthought.com/mayavi/mayavi/mlab.html#simple-scripting-with-mlab
+3.  从Python编写Mayavi应用程序脚本。Mayavi应用程序本身具有功能强大且通用的脚本API，可用于使其适应您的需求。
+
+### 安装
+1.  用pip安装。如果您使用的是Python 3.x并且在64位计算机上，则通过pip进行安装是最简单的，如下所示：
+    pip install mayavi
+    pip install PyQt5
+2.  使用Conda-forge安装。
+    1.   首先克隆环境或从头开始创建一个环境 
+         conda create --name pyforge --clone root 或者
+         conda create --name pyforge python=2.7
+    2.   然后添加conda-forge channel
+         conda config --add channels conda-forge
+    3.   激活‘pyforge’环境
+         source activate pyforge
+    4.   为Mayavi安装依赖项
+         conda install vtk
+         conda install pyqt=4
+    5.   安装Mayavi
+         conda install mayavi
+# 绘图函数
+
+## 参数说明
+1.  color：VTK对象的颜色，定义为(0,1)的三元组
+2.  colormap：colormap的类型，例如Reds、Blues、Copper等
+3.  extent：x、y、z数组范围[xmin, xmax, ymin, ymax, zmin, zmax]
+4.  figure：画图
+5.  line_width：线的宽度，该值为float，默认为0.2
+6.  mask_points：减少/降低大规模点数据集的数量
+7.  mode：符号的模式，例如2darrow、2dcircle、arrow、cone等
+8.  name：VTK对象名字
+9.  opcity：Vtk对象的整体透明度，该值为float型，默认为1.0
+10. reset_zoom：对新加入场景数据的放缩进行重置。默认为True
+11. resolution：符号的分辨率，如球体的细分数，该值为整型，默认为8
+12. scale_factor：符号放缩的比例
+13. scale_mode：符号的放缩模式，如vector、scalar、none
+14. transparent：根据标量值确定actor的透明度
+15. vmax：对colormap放缩的最大值
+16：vmin：对colormap放缩的最小值
+
+## 0D和1D数据
+
+### points3d:在提供的数据位置绘制字形（如点）
+1.  功能标签：
+points3d（x，y，z ...）
+points3d（x，y，z，s，...）
+points3d（x，y，z，f，...）
+x，y和z是相同形状的numpy数组或列表，给出了点的位置。
+s表示在该坐标点处的标量值。
+f表示通过函数f(x.y.z)返回的标量值。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_points3d():
+    t = np.linspace(0, 4 * np.pi, 20)
+    x = np.sin(2 * t)
+    y = np.cos(t)
+    z = np.cos(2 * t)
+    s = 2 + np.sin(t)
+
+    return points3d(x, y, z, s, colormap="copper", scale_factor=.25)
+```
+```{python}
+t=np.mgrid[-np.pi:np.pi:100j]
+s=np.sin(t)
+mlab.points3d(np.cos(t),np.sin(3*t),np.cos(5*t),mode='sphere',line_width=1)
+mlab.colorbar()
+mlab.show()
+```
+### plot3d:在点之间绘制线
+1.  功能标签：
+plot3d（x，y，z，...）
+plot3d（x，y，z，s，...）
+x,y,z,s是具有相同形状的numpy数组或列表。x,y,z是三维坐标，也就是空间中数据点的位置。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_plot3d():
+    """Generates a pretty set of lines."""
+    n_mer, n_long = 6, 11
+    dphi = np.pi / 1000.0
+    phi = np.arange(0.0, 2 * np.pi + 0.5 * dphi, dphi)
+    mu = phi * n_mer
+    x = np.cos(mu) * (1 + np.cos(n_long * mu / n_mer) * 0.5)
+    y = np.sin(mu) * (1 + np.cos(n_long * mu / n_mer) * 0.5)
+    z = np.sin(n_long * mu / n_mer) * 0.5
+
+    l = plot3d(x, y, z, np.sin(mu), tube_radius=0.025, colormap='Spectral')
+    return l
+ ``` 
+```{python}
+t=np.mgrid[-np.pi:np.pi:100j]
+mlab.plotsd(np.cos(t),np.sin(3*t),np.cos(5*t),color=(0.23,0.6,1),colormap='Spectral')
+mlab.colorbar()
+mlab.show()
+```
+
+## 2D数据
+
+### contour_surf:使用以2D数组提供的高程网格间隔数据绘制表面轮廓
+1.  功能标签：
+contour_surf(s, ...)
+contour_surf(x, y, s, ...)
+contour_surf(x, y, f, ...)
+s是二维数组;
+x和y给出与s值相对应的位置坐标;
+f是可调用的函数，例如peaks函数。
+2.  例子：
+```{python}
+import numpy as np 
+from mayavi.mlab import *
+
+x, y = np.mgrid[-5:5:70j, -5:5:70j]
+contour_surf(x,y,peaks,contours=9)
+colorbar()
+show()
+ ```
+### imshow:查看2D阵列作为图像。
+1.  功能标签：
+imshow(s, ...)
+s是一个二维数组。s的值使用颜色图映射到一种颜色。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+s = np.random.rand(3,3)
+imshow(s, colormap='gist_earth')
+colorbar()
+show()
+```
+### mesh:使用以2D数组提供的网格间距数据绘制表面
+1.  功能标签：
+mesh(x,y,z, ...)
+x，y，z是2D阵列，所有形状均相同。对于简单结构（例如正交网格），首选surf函数，因为它将创建更有效的数据结构。对于由三角形而不是常规的隐连通网格，见
+triangular_mesh功能。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_mesh():
+    """A very pretty picture of spherical harmonics translated from
+    the octaviz example."""
+    pi = np.pi
+    cos = np.cos
+    sin = np.sin
+    dphi, dtheta = pi / 250.0, pi / 250.0
+    [phi, theta] = np.mgrid[0:pi + dphi * 1.5:dphi,
+                            0:2 * pi + dtheta * 1.5:dtheta]
+    m0 = 4;m1 = 3;m2 = 2;m3 = 3;m4 = 6;m5 = 2;m6 = 6;m7 = 4
+    r = sin(m0 * phi) ** m1 + cos(m2 * phi) ** m3 + \
+        sin(m4 * theta) ** m5 + cos(m6 * theta) ** m7
+    x = r * sin(phi) * cos(theta)
+    y = r * cos(phi)
+    z = r * sin(phi) * sin(theta)
+
+    return mesh(x, y, z, colormap="bone")
+ ```
+```{python}
+x,y=np.mgrid[-5:5:70j,-5:5:70j]
+z=peaks(x,y)
+mesh(x,y,z)
+colorbar()
+show()
+```
+### surf:使用以2D数组提供的规则间隔的高程数据绘制表面
+1.  功能标签：
+surf(s, ...)
+surf(x, y, s, ...)
+surf(x, y, f, ...)
+2.  例子：
+```{python}
+import numpy
+from mayavi.mlab import *
+
+def test_surf():
+    """Test surf on regularly spaced co-ordinates like MayaVi."""
+    def f(x, y):
+        sin, cos = np.sin, np.cos
+        return sin(x + y) + sin(2 * x - y) + cos(3 * x + 4 * y)
+
+    x, y = np.mgrid[-7.:7.05:0.1, -5.:5.05:0.05]
+    s = surf(x, y, f)
+    #cs = contour_surf(x, y, f, contour_z=0)
+    return s
+ ```
+```{python}
+mlab.clf()
+x,y=np.mgrid[-10:10:100j,-10:10:100j]
+r=np.sqrt(x**2+y**2)
+z=np.sin(r)/r
+mlab.surf(z,warp_scale='auto')
+mlab.colorbar()
+mlab.show()
+```
+```{python}
+pk_x,pk_y=np.mgrid[-5:5:70j,-5:5:70j]
+pk_z=peaks(pk_x,pk_y)
+mlab.surf(pk_z,warp_scale='auto',colormap='jet')
+mlab.colorbar()
+mlab.show()
+```
+### triangle_mesh:使用由顶点的位置和连接它们的三角形定义的网格来绘制表面
+1.  功能标签：
+triangular_mesh(x, y, z, triangles ...)
+x，y，z是给出表面顶点位置的数组。triangles是由三元组（或数组）组成的列表，列出了每个三角形中的顶点。顶点是按其在位置数组中的出现编号索引的。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_triangular_mesh():
+    """An example of a cone, ie a non-regular mesh defined by its
+        triangles.
+    """
+    n = 8
+    t = np.linspace(-np.pi, np.pi, n)
+    z = np.exp(1j * t)
+    x = z.real.copy()
+    y = z.imag.copy()
+    z = np.zeros_like(x)
+
+    triangles = [(0, i, i + 1) for i in range(1, n)]
+    x = np.r_[0, x]
+    y = np.r_[0, y]
+    z = np.r_[1, z]
+    t = np.r_[0, t]
+
+    return triangular_mesh(x, y, z, triangles, scalars=t)
+ ```
+### barchart:将垂直字形（如条形）绘制为垂直缩放，以进行直方图状绘制
+1.  功能标签：
+barchart(s, ...)
+barchart(x, y, s, ...)
+barchart(x, y, f, ...)
+barchart(x, y, z, s, ...)
+barchart(x, y, z, f, ...)
+如果只传递一个参数，可以是一维、二维、三维的给定向量长度的数组；
+如果传递三个参数(x,y,s)或(x,y,f)，x,y是对应于数组s的二维坐标，也可以是可调用函数f，该函数返回数组；
+四个参数的时候(x,y,z)表示三维坐标。
+2.  例子：
+```{python}
+import numpy as np
+import mayavi.mlab as mlab
+
+s = np.random.rand(3, 3)
+mlab.barchart(s)
+mlab.vectorbar()
+mlab.show()
+```
+```{python}
+import numpy as np
+import mayavi.mlab as mlab
+impory matplotlib.pyplot as plt
+
+x,y = np.mgrid[-5:5:20j,-5:5:20j]
+def peaks(x,y):
+        return 3.0*(1.0-x)**2*exp(-(x**2) - (y+1.0)**2) - 10*(x/5.0 - x**3 - y**5) * exp(-x**2-y**2) - 1.0/3.0*exp(-(x+1.0)**2 - y**2)
+s=peaks(x,y)
+mlab.barchart(x,y,s)
+mlab.vectorbar()
+mlab.show()
+```
+
+## 3D数据
+
+### contour3d
+1.  功能标签：
+contour3d(scalars, ...)
+contour3d(x, y, z, scalars, ...)
+scalars是3D numpy数组，用于在网络上提供数据。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+x, y, z = np.ogrid[-5:5:64j, -5:5:64j, -5:5:64j]
+scalars = x * x * 0.5 + y * y + z * z * 2.0
+contour3d(scalars, contours=4, transparent=True)
+colorbar()
+show()
+
+x, y, z = np.ogrid[-10:10:20j, -10:10:20j, -10:10:20j]
+s = np.sin(x*y*z)/(x*y*z)
+contour3d(s)
+show()
+```
+### flow:跟随矢量场的流创建粒子的轨迹
+1.  功能标签：
+flow（u，v，w，...）
+flow（x，y，z，u，v，w，...）
+flow（x，y，z，f，...）
+如果仅传递u，v和w三个数组，则它们必须是3D数组，并且箭头的位置假定为（u，v，w）数组中相应点的索引。
+如果传递了6个数组（x，y，z，u，v，w），则前三个数组给出箭头的位置，最后三个数组给出箭头,x，y和z数组是由numpy.mgrid生成的。
+如果传递了4个位置参数（x，y，z，f），则最后一个参数必须是可调用的f，它在给定位置（x，y，z）的情况下返回向量分量（u，v，w）。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_flow():
+    x, y, z = np.mgrid[-4:4:40j, -4:4:40j, 0:4:20j]
+    r = np.sqrt(x ** 2 + y ** 2 + z ** 2 + 0.1)
+    u = y * np.sin(r) / r
+    v = -x * np.sin(r) / r
+    w = np.ones_like(z)*0.05
+    obj = flow(u, v, w)
+    return obj
+```
+### quiver3d:在提供的位置指示矢量的方向图示字形（如箭头）
+1.  功能标签：
+quiver3d（u，v，w，...）
+quiver3d（x，y，z，u，v，w，...）
+quiver3d（x，y，z，f，...）
+2.  例子：
+```{python}
+import numpy
+from mayavi.mlab import *
+
+x, y, z = np.mgrid[-0:3:0.6, -0:3:0.6, -0:3:0.6]
+r = np.sqrt(x ** 2 + y ** 2 + z ** 4)
+u = y * np.sin(r) / (r + 0.001)
+v = -x * np.sin(r) / (r + 0.001)
+w = np.zeros_like(r)
+quiver3d(x, y, z, u, v, w, line_width=3, scale_factor=1)
+colorbar()
+show()
+```
+### volume_slice:绘制一个交互式图像平面
+1.  功能标签：
+volume_slice(scalars, ...)
+volume_slice(x, y, z, scalars, ...)
+scalars是3D numpy数组，用于在网格上提供数据。
+2.  例子：
+```{python}
+import numpy as np
+from mayavi.mlab import *
+
+def test_volume_slice():
+    x, y, z = np.ogrid[-5:5:64j, -5:5:64j, -5:5:64j]
+
+    scalars = x * x * 0.5 + y * y + z * z * 2.0
+
+    obj = volume_slice(scalars, plane_orientation='x_axes')
+    return obj
+ ```
+
+# 改变图形外观
+
+### 改变颜色
+1.  colormap定义的颜色也叫LUT：look up table。
+2.  常见的colormap：accent flag hot pubu set2 cool等
+### 图像控制函数
+1.  清除当前图形:clf(figure=None)
+2.  关闭图形窗口：close(scene=None,all=False)
+3.  重新绘制当前图形：draw(figure=None)
+4.  创建一个新的Scene或访问一个存在的Scene：figure(figure=None,bgcolor=None,fgcolor=None,engine=None,size=(400,350))
+5.  检索当前图形：gcf(engine=None)
+6.  储存当前的前景：savefig(filename, size=None, figure=None,
+    magnification='auto', **kwargs) 输出格式由文件的扩展名推断出来，可能是
+    png,jpg,bmp,tiff,ps,eps等。
+7.  屏幕截图，返回当前图形像素图作为数组：screenshot(figure=None, mode='rgb',
+    antialiased=False)
+```{python}
+from mayavi import mlab
+mlab.test_plot3d()
+arr = mlab.screenshot()
+import pylab as pl
+pl.imshow(arr)
+pl.axis('off')
+pl.show()
+```
+### 图像装饰函数
+1.  为给定对象的颜色映射添加颜色条：colorbar    (object=None, title=None,
+orientation=None, nb_labels=None, nb_colors=None, label_fmt=None)
+2.  为给定对象的标量颜色映射添加颜色条：scalarbar
+3.  为给定对象的矢量颜色映射添加一个颜色条：vectorbar
+4.  创建一组轴（如果尚未创建），并添加x轴的标签:xlabel(text,object=None)
+5.  创建一组轴（如果尚未创建），并添加y轴的标签:ylabel
+6.  创建一组轴（如果尚未创建），并添加z轴的标签:zlabel  
+### 相机控制函数
+1.  移动相机和焦点：move(forward = None,right = None,up = None)
+2.  围绕与当前视图的“右”方向相对应的轴旋转相机:pitch(degrees)
+3.  设置/获取相机沿“向前”轴旋转一定角度：roll(roll=None, figure=None)
+4.  设置/获取当前视图中相机的视点：view(azimuth=None, elevation=None,
+distance=None, focalpoint=None, roll=None, reset_roll=True, figure=None)
+5.  围绕与当前视图的“向上”方向对应的轴旋转相机:yaw(degrees)
+```{python}
+f=mlab.gcf()
+camera=f.scene.camera
+camera.yaw(45)
+```
+### 其他控制函数
+1.  动画控制函数：animate(unc=None, delay=500, ui=True,   support_movie=True)
+2.  为当前物体设置坐标轴：axes(*args, **kwargs)
+3.  为当前物体建立外轮廓：outline(*args, **kwargs)
+4.  与当前图像开始交互：show(func=None, stop=False)
+5.  显示有关mayavi管道的对话框,可以以图形方式编辑场景中不同对象的属性：
+show_pipeline(self，engine = None，rich_view = True)
+6.  为图像添加文本：text(*args,**kwargs)
+7.  为绘制图像添加标题：title(*args,**kwargs)
+
+# mlab管线控制函数
+1.  通过将Mayavi中的数据加载到Sources对象中，然后通过Filters转换数据，并使用Modules将其可视化，从而创建Mayavi中的可视化。
+2.  该模块可在mlab： mlab.pipeline中访问，也可以从mayavi.tools.pipeline导入。
+```{python}
+import numpy as np
+from mayavi import mlab
+a=np.random.random((4,4))
+mlab.surf(a)
+mlab.show_pipeline()
+```
+## Data sources数据源
+### 函数说明
+1.  未连接的源
+    1.  创建分散的标量数据:mlab.pipeline.scalar_scatter(*args,**kwargs)
+    2.  创建分散的矢量数据:mlab.pipeline.vector_scatter(*args,**kwargs)
+2.  隐式连接源
+    1.  从2D array创建结构化2D数据：mlab.pipeline.array2d_source(*args,**kwargs)
+    2.  创建标量字段数据：mlab.pipeline.scalar_field(*args,**kwargs)
+    3.  创建矢量字段数据：mlab.pipeline.vector_field(*args,**kwargs)
+3.  显式连接的源
+    1.  通过指定点和三角形连通性来创建2D网格:mlab.pipeline.triangular_mesh_source (x,y,z,triangles,**kwargs)
+    2.  创建线数据：mlab.pipeline.line_source(*args,**kwargs)
+    3.  创建2D网格数据：mlab.pipeline.grid_source (x,y,z,**kwargs)
+4.  其他
+    1.  创建一个VTK图像数据源：mlab.pipeline.builtin_image()
+    2.  创建一个VTK多边形数据源：mlab.pipeline.builtin_surface()
+    3.  打开一个数据文件：mlab.pipeline.open(filename,Figure = None)
+
+## Filters用来数据变换
+### 函数说明
+1.  对输入数据集计算等值面：contour
+2.  对数据进行切面计算，可以交互的更改和移动切面：cut_plane
+3.  执行二维delaunay三角化：delaunay2D
+4.  执行三维delaunay三角化：delaunay3D
+5.  对输入数据进行采样：mask_points
+6.  取一定阈值范围内的数据：threshold
+7.  对输入数据执行线性变换：transform_data
+8.  将线转成管线数据：tube
+
+## Modules用来实现可视
+### 函数说明
+1.  对输入点绘制不同类型的符号，符号的颜色和方向由该点的标量和矢量数据决定：
+glyph
+2.  对输入的体数据绘制其等值面：iso_surface
+3.  对输入的标量数据绘制特定位置的切平面：scalar_cut_plane
+4.  对输入的矢量数据绘制特定位置的切平面：vector_cut_plane
+5.  对数据（VTK dataset,mayavi sources）建立外表面：surface
+6.  对标量场数据进行体绘制：volume
+```{python}
+import numpy as np
+x, y, z = np.ogrid[-10:10:20j, -10:10:20j, -10:10:20j]
+s = np.sin(x*y*z)/(x*y*z)
+
+from mayavi import mlab
+from mayavi.tools import pipeline
+src = mlab.pipeline.scalar_field(s)
+mlab.pipeline.iso_surface(src, contours=[s.min()+0.1*s.ptp(), ], opacity=0.1)
+mlab.pipeline.iso_surface(src, contours=[s.max()-0.1*s.ptp(), ])
+mlab.pipeline.image_plane_widget(src,
+                            plane_orientation='z_axes',
+                            slice_index=10)
+mlab.show()
+```
+
