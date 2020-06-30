@@ -1,0 +1,271 @@
+---
+title: "交互式作图，网页下的可视化应用——Bokeh Introduction"
+author: "py-vis-team"
+date: "2020年6月"
+institute: 中南财经政法大学统计与数学学院
+csl: ./style/chinese-gb7714-2015-numeric.csl
+css: ./style/markdown.css
+bibliography: [./Bibfile.bib]
+eqnPrefixTemplate: ($$i$$)
+link-citations: true
+linkReferences: true
+chapters: true
+tableEqns: false
+autoEqnLabels: false
+classoption: "aspectratio=1610"
+---
+
+```{r setup, echo=F, purl=F}
+knitr::opts_knit$set(root.dir = getwd())
+knitr::opts_chunk$set(echo = TRUE, results = 'hide')
+knitr::opts_chunk$set(warning = FALSE, message=FALSE)
+knitr::opts_chunk$set(fig.align="center"
+                      ## ,out.width="0.9\\textwidth" # latex
+                      ,out.width="90%" # for both latex and html
+                      ,fig.width=5, fig.height=3
+                      )
+```
+
+```{r prepare, echo=F, purl=F}
+rm(list=ls())
+options(digits=4)
+options(scipen=100)
+graphics.off()
+Sys.setlocale("LC_ALL", "Chinese")
+library(reticulate)
+```
+
+## 0 `Bokeh`简介
+
+## 1 安装`Bokeh`
+
+## 2 下载
+
+## 3 `Bokeh`基础绘图功能
+
+### 3.1 基础的Bokeh对象
+
+为了实现高级的Bokeh使用方法，在进行进一步的加载之前，首先定义一系列的Bokeh对象：
+
+- 嵌入：嵌入是指Bokeh将图与窗口部件加入到Web程序和网页中的方法，这种操作在Bokeh中同样是可行的。
+- 形状（Glyphs）：基础的构成模块，例如直线、矩阵、圆等等。
+- 模型（Models）：构成Bokeh场景图的最低级对象。
+- 服务器：用于共享、发布Bokeh图形以及应用程序。
+- 部件：用户模块，例如滑块、菜单、按钮等等，是用户用来交互的主要途径。
+  
+
+### 3.2 形状绘图
+形状绘图，也就是绘制形状对象。首先注意到，如果图像需要保存，在每次绘图之前，都建议设置图像的输出路径。`Bokeh`中可以通过`circle`、`square`等等函数作出美观的交互式图形。
+
+``` {python}
+from bokeh.plotting import figure,  show
+from bokeh.io import output_notebook
+
+p = figure(plot_width = 400, plot_height = 400)#set the size of the figure
+
+p.circle_cross([1,2,], [6,7], size = 20, color = 'navy', alpha = 0.5)#plot circles
+
+p.dash([3,4,5], [2,4,5], size = 10, color = 'red', alpha = 0.5)#plot squares
+
+show(p, notebook_handle=True)
+
+```
+- 绘制直线
+
+为了更好地展示绘制直线的效果，我们使用已有数据集`covid19.csv`来进行描述，并提取其中的安徽省的日感染数据进行分析。首先需要使用`pandas`对数据进行清洗。
+
+
+``` {python}
+import pandas as pd 
+import numpy as np 
+from datetime import datetime
+ncov = pd.read_csv('covid19.csv')
+ncov['Observation Date'] = pd.to_datetime(ncov['Observation Date'], format = '%d-%m-%Y')
+ahncov = ncov[ncov['Province/State'] == 'Anhui']
+ahconfirmed = ahncov.Confirmed
+ahdate = np.arange(0,54)
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.line(ahdate, ahconfirmed, line_width = 2)
+
+show(p, notebook_handle=True)
+
+```
+- 绘制阶梯状的直线
+
+这种作图在生存分析与医学统计学中非常常见，可以清楚地描述出某一天的具体的增加程度。
+
+``` {python}
+p = figure(plot_width = 400, plot_height = 400)
+
+p.step(ahdate, ahconfirmed, line_width = 2, mode = 'center')
+
+show(p, notebook_handle=True)
+
+```
+- 绘制多条曲线
+
+从`ncov`数据集中提取`Hubei`的数据，与`Anhui`进行对比。
+
+
+``` {python}
+hbncov = ncov[ncov['Province/State'] == 'Hubei']
+hbconfirmed = hbncov.Confirmed
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.multi_line([ahdate, ahdate], [ahconfirmed, hbconfirmed], color = ['firebrick', 'navy'], alpha = [0.5,0.8], line_width = 2)
+
+show(p, notebook_handle = True)
+
+```
+- 绘制叠加的曲线
+
+叠加的曲线与多条曲线有相通的地方。叠加的曲线，也就是对于每一个$x$点，$y_i$的值为$y_{i-1}+y_i$。
+
+**注意**： 虽然上面的绘图的对象类型可以为`List`, `Series`等，但是该案例中需要先使用`ColumnDataSource`合并所有数据。
+``` {python}
+from bokeh.models import ColumnDataSource
+
+source = ColumnDataSource(data = dict(x = ahdate, y1 = ahconfirmed, y2 = hbconfirmed))
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.vline_stack(['y1', 'y2'], x = 'x', source = source, color = ['firebrick', 'navy'], alpha = [0.5,0.8], line_width = 2)
+
+show(p, notebook_handle=True)
+```
+- 绘制条形
+
+``` {python}
+from bokeh.plotting import figure, output_file, show
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.vbar(x = [1,2,3], width = 0.5, bottom = 0, top = [1,2,3])
+
+show(p, notebook_handle=True)
+```
+同样的，对于横向的条形，只需要把`vbar`更改为`hbar`， x与top更改为y与right即可。
+对于一个层叠的条形，可以像上面层叠的曲线一样，首先创建一个基础的source对象，然后对source使用`hbar_stack`即可。
+
+- 绘制条状区域
+
+条状区域为两个序列之间的空白部分的填充。可以使用`harea`来绘制填充，或者使用`varea_stack`绘制叠加的区域。
+
+
+``` {python}
+from bokeh.plotting import figure, output_file, show
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.varea(x = ahdate, y1 = ahconfirmed, y2 = hbconfirmed)
+
+show(p, notebook_handle=True)
+```
+
+
+``` {python}
+#绘制叠加区域
+
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure, show
+
+source = ColumnDataSource(data = dict(x = ahdate, y1 = ahconfirmed, y2 = hbconfirmed))
+
+p = figure(plot_width = 400, plot_height = 400)
+
+p.varea_stack(['y1', 'y2'], x = 'x', source = source, color = ['grey', 'lightgrey'])
+
+show(p,notebook_handle=True)
+```
+- 绘制时间序列图形
+
+在`Bokeh`中可以绘制基础的时间序列图。结合`figure()`与`bokeh.plotting`可以画出交互式的时间序列图。下面我们使用安徽省的感染人数数据来展示这一功能的具体用法。
+
+``` {python}
+from bokeh.plotting import figure, show
+
+p = figure(plot_width = 800, plot_height = 250, x_axis_type = 'datetime')
+
+p.line(ahncov['Observation Date'], ahconfirmed, color = 'navy', alpha = 0.6)
+
+show(p, notebook_handle=True)
+```
+## 4 获取`Bokeh`可处理的数据对象
+
+在前文中，我们看到，对于一些函数需要使用`ColumnDataSource`将原始数据转换为
+`Bokeh`可处理的对象。同样的，`Bokeh`是一个可以用于统计绘图的库，故其与`Pandas`之
+间的联系也非常紧密。下面，通过`ncov`数据集来对`Bokeh`的数据对象进行描述。
+
+### 4.1 数据源
+
+- 使用`ColumnDataSource`
+
+使用`ColumnDataSource`是一种最基础的，也是应用最广泛的`Bokeh`数据处理对象。简单
+的`CDS`，其实就是一个`dict`对象，其中定义了列名等。在上面的例子中，我们使用的大
+多都是简单的`CDS`对象。
+
+- 使用`Pandas`
+
+`Pandas`库能够对数据进行很多统计处理，可视化这些结果是非常必要的。幸运的是，
+`Bokeh`中也有直接对`DataFrame`及`GroupBy`对象进行可视化的函数。当然，数据框对象
+可以直接使用`CDS`转换为`CDS`对象。
+
+
+``` {python}
+source = ColumnDataSource(ncov)
+```
+
+对`pandas`的`Groupby`对象也可以实现轻松转换：
+``` {python}
+group  = ncov.groupby('Province/State')
+source = ColumnDataSource(group)
+```
+## 5 为图表添加图例
+
+在`Bokeh`中可以使用`factor_cmap()`以及`factor_mark`为图表创建图例。仍然以湖北以及安徽省的确诊案例数为例。
+``` {python}
+from bokeh.plotting import figure, show
+from bokeh.models import Legend, LegendItem
+
+Province = ['Hubei', 'Anhui']
+Markers = ['line', 'line']
+
+p = figure(title = 'Daily Confirmed in Hubei and Anhui', plot_width = 800, plot_height = 250, x_axis_type = 'datetime')
+p.xaxis.axis_label = 'Date'
+#p.yaxis_axis_label = 'Confirmed'
+
+source = ColumnDataSource(dict(x = ahncov['Observation Date'], y1 = ahconfirmed, y2 = hbconfirmed))
+r = p.multi_line([ahncov['Observation Date'], ahncov['Observation Date']], [ahconfirmed, hbconfirmed], line_color = ['firebrick', 'navy'], line_alpha = [0.5,0.8])
+
+legend = Legend(items = [
+    LegendItem(label = 'Anhui', renderers = [r], index = 0),
+    LegendItem(label = 'Hubei', renderers = [r], index = 1)
+])
+p.add_layout(legend)
+
+show(p, notebook_handle=True)
+```
+图例也可以进行交互式展示，例如：
+``` {python}
+from bokeh.plotting import figure, show
+from bokeh.models import Legend, LegendItem
+
+Province = ['Hubei', 'Anhui']
+Markers = ['line', 'line']
+
+p = figure(title = 'Daily Confirmed in Hubei and Anhui', plot_width = 800, plot_height = 250, x_axis_type = 'datetime')
+p.xaxis.axis_label = 'Date'
+#p.yaxis_axis_label = 'Confirmed'
+
+ah = p.line(ahncov['Observation Date'], ahconfirmed, color = 'firebrick', alpha = 0.5, legend_label = 'Anhui')
+hb = p.line(ahncov['Observation Date'], hbconfirmed, color = 'navy', alpha = 0.8, legend_label = 'Hubei')
+
+p.legend.location = "top_left"
+p.legend.click_policy = "hide"#you can also try 'mute'
+
+show(p, notebook_handle=True)
+```
+点击上图中的图例，就可以选择主要展示的省份。
