@@ -37,9 +37,33 @@ library(reticulate)
 
 ## 0 `Bokeh`简介
 
+`Bokeh`是一种依赖于`Python`的交互式绘图库，其结合了`html`、`Python`、`JavaScript`，
+可视化以及交互能力非常强大。它提供了优雅、简洁的可视化解决方案，并且能够在大数据、
+流数据上展现高性能的交互系统。对于前端开发、数据分析，`Bokeh`都是一个非常好的选择。
+
 ## 1 安装`Bokeh`
 
-## 2 下载
+如果您为`conda`的使用者，在`bash`中执行：
+```
+conda install bokeh
+```
+
+如果您为`pip`的使用者，在命令行中执行：
+```
+pip install bokeh
+```
+
+## 2 官方教程与文档：
+
+官方文档：https://docs.bokeh.org/en/latest/docs/user_guide.html#userguide
+
+官方教程：https://mybinder.org/v2/gh/bokeh/bokeh-notebooks/master?filepath=tutorial%2F00%20-%20Introduction%20and%20Setup.ipynb
+
+参考手册：https://docs.bokeh.org/en/latest/docs/reference.html
+
+社区：https://discourse.bokeh.org/
+
+Github地址：https://github.com/bokeh/bokeh
 
 ## 3 `Bokeh`基础绘图功能
 
@@ -61,6 +85,7 @@ library(reticulate)
 from bokeh.plotting import figure,  show
 from bokeh.io import output_notebook
 
+output_notebook()
 p = figure(plot_width = 400, plot_height = 400)#set the size of the figure
 
 p.circle_cross([1,2,], [6,7], size = 20, color = 'navy', alpha = 0.5)#plot circles
@@ -195,22 +220,19 @@ show(p, notebook_handle=True)
 ```
 ## 4 获取`Bokeh`可处理的数据对象
 
-在前文中，我们看到，对于一些函数需要使用`ColumnDataSource`将原始数据转换为
-`Bokeh`可处理的对象。同样的，`Bokeh`是一个可以用于统计绘图的库，故其与`Pandas`之
+在前文中，我们看到，对于一些函数需要使用`ColumnDataSource`将原始数据转换为`Bokeh`可处理的对象。同样的，`Bokeh`是一个可以用于统计绘图的库，故其与`Pandas`之
 间的联系也非常紧密。下面，通过`ncov`数据集来对`Bokeh`的数据对象进行描述。
 
 ### 4.1 数据源
 
 - 使用`ColumnDataSource`
 
-使用`ColumnDataSource`是一种最基础的，也是应用最广泛的`Bokeh`数据处理对象。简单
-的`CDS`，其实就是一个`dict`对象，其中定义了列名等。在上面的例子中，我们使用的大
+使用`ColumnDataSource`是一种最基础的，也是应用最广泛的`Bokeh`数据处理对象。简单的`CDS`，其实就是一个`dict`对象，其中定义了列名等。在上面的例子中，我们使用的大
 多都是简单的`CDS`对象。
 
 - 使用`Pandas`
 
-`Pandas`库能够对数据进行很多统计处理，可视化这些结果是非常必要的。幸运的是，
-`Bokeh`中也有直接对`DataFrame`及`GroupBy`对象进行可视化的函数。当然，数据框对象
+`Pandas`库能够对数据进行很多统计处理，可视化这些结果是非常必要的。幸运的是，`Bokeh`中也有直接对`DataFrame`及`GroupBy`对象进行可视化的函数。当然，数据框对象
 可以直接使用`CDS`转换为`CDS`对象。
 
 
@@ -248,7 +270,7 @@ p.add_layout(legend)
 
 show(p, notebook_handle=True)
 ```
-图例也可以进行交互式展示，例如：
+<span id=inter1>图例也可以进行交互式展示，例如：</span>：
 ``` {python}
 from bokeh.plotting import figure, show
 from bokeh.models import Legend, LegendItem
@@ -269,3 +291,314 @@ p.legend.click_policy = "hide"#you can also try 'mute'
 show(p, notebook_handle=True)
 ```
 点击上图中的图例，就可以选择主要展示的省份。
+
+## 6 设置图片的展示风格
+
+- 按列展示：
+
+``` {python}
+from bokeh.layouts import column 
+
+s1 = figure(plot_width = 250, plot_height = 250,background_fill_color="#fafafa")
+s1.line(ahncov['Observation Date'], ahconfirmed, color = 'firebrick', alpha = 0.5, legend_label = 'Anhui')
+
+s2 = figure(plot_width = 250, plot_height = 250,background_fill_color="#fafafa")
+s2.line(ahncov['Observation Date'], hbconfirmed, color = 'navy', alpha = 0.8, legend_label = 'Hubei')
+
+show(column(s1, s2), notebook_handle=True)
+```
+
+- 按行展示：
+
+``` {python}
+from bokeh.layouts import row
+
+s1 = figure(plot_width = 250, plot_height = 250,background_fill_color="#fafafa")
+s1.line(ahncov['Observation Date'], ahconfirmed, color = 'firebrick', alpha = 0.5, legend_label = 'Anhui')
+
+s2 = figure(plot_width = 250, plot_height = 250,background_fill_color="#fafafa")
+s2.line(ahncov['Observation Date'], hbconfirmed, color = 'navy', alpha = 0.8, legend_label = 'Hubei')
+
+show(row(s1, s2), notebook_handle=True)
+```
+
+- 分区域展示（grid）
+
+``` {python}
+from bokeh.layouts import gridplot
+
+s1 = figure(background_fill_color="#fafafa")
+s1.line(ahncov['Observation Date'], ahconfirmed, color = 'firebrick', alpha = 0.5, legend_label = 'Anhui')
+
+s2 = figure(background_fill_color="#fafafa")
+s2.line(ahncov['Observation Date'], hbconfirmed, color = 'navy', alpha = 0.8, legend_label = 'Hubei')
+
+## make a grid
+grid = gridplot([[s1, None], [None, s2]], plot_width=250, plot_height=250)
+show(grid, notebook_handle=True)
+```
+
+## 7 在jupyter中的展示方法
+
+## 8 Bokeh最精彩的部分——交互式作图
+
+本Section介绍了Bokeh最精彩的部分，交互式的作图以及图形与小插件的连接方法，但是由于笔者对JavaScript的理解有限，所以某些部分并不是非常透彻，请谅解。
+
+### 8.0 最简单的已设置工具——HoverTool
+
+HoverTool是我们在网页浏览中最常见的一种交互式方法。即鼠标指在哪里，哪里就会出现数据。这是一种比较直接的交互式绘图工具。下面用安徽省的感染病例数
+据，进行示例。
+
+
+``` {python}
+from bokeh.models import HoverTool,Toolbar, Plot
+prov = np.repeat('Anhui', 54)
+source = ColumnDataSource(data = dict(
+    x =  ahncov['Observation Date'],
+    y = ahconfirmed,
+    province = prov
+))
+
+
+#TOOLTIPS = [
+#    ("Province", "@province"),
+#    ("infected", "$y"),
+#    ("Date", "$x")
+#]
+
+#hover_tool.formatters = {"$x": "datetime"}
+
+hover_tool = HoverTool(
+    tooltips = [
+        ("Province", "@province"),
+        ("infected", "$y"),
+        ("Date", "$x{%F}")
+    ],
+    formatters = {
+        "$x":'datetime',
+    },
+    mode = 'vline'
+)
+
+plot = figure()
+plot.add_tools(hover_tool)
+
+plot.line('x', 'y',source = source, color = 'firebrick', alpha = 0.5, legend_label = 'Anhui', line_width = 3)
+
+show(plot, notebook_handle=True)
+
+```
+
+一个创建Bokeh HoverTool的标准流程为（同样适用于其他的工具）：
+- 从`bokeh.models`导入；
+- 命名一个实例，例如：`hover_tool = HoverTool()`，在`HoverTool()`中可以选择合适的参数；
+- 创建`figure`，并且加入定义的实例；
+- 作图
+
+使用这一方法，就可以适应大部分自定义的工具包，包括放大、作图等等。如果您熟悉`html`语言，您可以结合静态网页语言，自定义ToolTips，在HoverTool中加入图片等。
+
+### 8.1 交互式绘图——让按钮链接图片
+
+上面我们通过一个简单的`HoverTool()`的例子，对交互式绘图有了一个较为清晰的了解。在`Bokeh`的交互式绘图中，主要有两个对象：按钮与图像。按钮常常是与一个或多个图像链接在一起的。
+Bokeh中可供用户选择的按钮种类非常多，下面我们将结合安徽省与江苏省的感染人数数据，对链接行为进行进一步的分析。
+
+``` {python}
+from bokeh.models import ColumnDataSource
+
+source = ColumnDataSource(data = dict(
+    x =  ahncov['Observation Date'],
+    y1 = ahconfirmed,
+    y0 = hbconfirmed,
+))
+
+tools = 'box_select, lasso_select, help'
+
+left = figure(tools = tools, width = 300, height = 300)
+left.line('x', 'y0', source = source)
+
+right = figure(tools = tools, width = 300, height = 300)
+right.line('x', 'y1', source = source)
+
+p = gridplot([[left, right]])
+show(p, notebook_handle = True)
+```
+
+前面我们介绍[交互式图例](#inter1)时，就已经接触过基础的按钮。Bokeh中，点击按钮时的反应主要通过CustomJS插入JavaScript代码来呈现。
+
+主要的流程如下：
+- 用CustomJS定义一个想要的返回效果
+- 定义一个工具
+- 将工具与图片链接起来
+
+``` {python}
+#例如，定义一个这样的图片：首先我们发现，感染人数的上升与logistic函数非常接近，现在我们希望通过更改logistic函数的参数，来做一个可视化的拟合过程：
+from bokeh.layouts import column
+from bokeh.models import CustomJS, ColumnDataSource, Slider
+
+x = np.linspace(0, 53, 2000)
+y = 1/(np.exp(1)**(-x)+1)
+
+source1 = ColumnDataSource(data = dict(x = range(0,53), y = ahconfirmed))
+source2 = ColumnDataSource(data = dict(x = x, y = y))
+
+plot = figure(plot_width = 400, plot_height = 400)
+plot.line('x', 'y', source = source1, line_width = 3, line_alpha = 0.6)
+plot.line('x', 'y', source = source2, line_width = 3, line_alpha = 0.6, line_color = 'firebrick')
+
+slider = Slider(start = 0, end = 1, value = 0, step = 0.01)
+
+callback = CustomJS(args = dict(source = source2, slider = slider), code = """
+    var data = source.data;
+    var f = slider.value;
+    var x = data['x'];
+    var y = data['y'];
+    for (var i = 0; i < x.length; i++){
+        y[i] = 1000*(Math.pow(Math.exp(1), f*x[i])-1)/(5+Math.pow(Math.exp(1), f*x[i]))
+    }
+    source.change.emit();
+""")
+
+slider.js_on_change('value', callback)
+
+show(column(slider, plot))
+```
+
+可以看到，上图我们的拟合结果还是比较接近的。这样，就使用可视化的方法得出了模型的参数。
+
+### 8.2 更实用的任务——出现or不出现
+这种方法主要是通过按钮来控制某个图像是否出现，通过`Button`、`Toggle`以及`CheckBox`等等按钮来隐藏或者显示某一图形。
+这种方法与之前介绍的图例有些相似，下面对安徽、湖北两省的感染数据进行展示：
+``` {python}
+
+from bokeh.models import Toggle
+
+source = ColumnDataSource(data = dict(
+    x =  ahncov['Observation Date'],
+    y1 = ahconfirmed,
+    y2 = hbconfirmed,
+))
+
+p = figure(plot_width = 800, plot_height = 400, x_axis_type = 'datetime')
+ah = p.line('x', 'y1', source = source, line_width = 3, line_color = 'navy', line_alpha = 0.8)
+hb = p.line('x', 'y2', source = source, line_width = 3, line_color = 'firebrick', line_alpha = 0.8)
+
+toggle1 = Toggle(label = 'Anhui Province', button_type = 'default', active = True, width_policy = 'min', background = 'grey')
+toggle1.js_link('active', ah, 'visible')
+
+toggle2 = Toggle(label = 'Hubei Province', button_type = 'default', active = True, width_policy = 'min', background = 'grey' )
+toggle2.js_link('active', hb, 'visible')
+
+show(column(p, toggle1, toggle2))
+```
+
+## 9 图片存储
+
+Bokeh支持图片的多种存储模式——`png`、`svg`等。
+`png`:
+``` {python}
+from bokeh.io import export_png
+
+export_png(plot, filename="plot.png")
+```
+`svg`:
+``` {python}
+from bokeh.io import export_svgs
+
+plot.output_backend = "svg"
+export_svgs(plot, filename="plot.svg")
+```
+## 10 将`Bokeh`图片嵌入至网页
+（这一部分的内容致谢：https://alanlee.fun/2018/03/15/embed-bokeh-plot/， 给出了非常完整的解释。）
+将Bokeh图像嵌入到网页文件(包括博客、Markdown等等)中，主要有三种方法：
+- HTML文档
+- Components
+- 自动加载脚本
+
+其中，最稳定的方法为输出HTML文档。假设现在我们已经输出了HTML文档`layout1.html`，使用您的编辑器打开该文档，查看HTML文件中`<div class="bk-root">`这一div块以及`script type="application/json" id="id">`和`<script type="text/javascript">`中的内容，复制到目标网页中即可。
+
+Components方法针对的是html文档标签，通过component去分解作图代码，生成html中指定的标签（div\script等），但是这种方法并不稳定，不建议使用。
+
+自动加载脚本，主要是把绘图的脚本放在自家服务器上面，用`bokeh.embed`中的`autoload_static`函数，自动加载脚本。
+
+总的来说，比较支持的是第一种方法，只需要复制到html或md文档内就可以生成图像。
+
+## 11 实例：基于`Bokeh`的疫情数据分析网站搭建
+
+## 12 一些更有意思的应用
+
+### 12.1 元素表(来自于官方文档)：
+
+``` {python}
+from bokeh.io import output_file, show
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure
+from bokeh.sampledata.periodic_table import elements
+from bokeh.transform import dodge, factor_cmap
+
+periods = ["I", "II", "III", "IV", "V", "VI", "VII"]
+groups = [str(x) for x in range(1, 19)]
+
+df = elements.copy()
+df["atomic mass"] = df["atomic mass"].astype(str)
+df["group"] = df["group"].astype(str)
+df["period"] = [periods[x-1] for x in df.period]
+df = df[df.group != "-"]
+df = df[df.symbol != "Lr"]
+df = df[df.symbol != "Lu"]
+
+cmap = {
+    "alkali metal"         : "#a6cee3",
+    "alkaline earth metal" : "#1f78b4",
+    "metal"                : "#d93b43",
+    "halogen"              : "#999d9a",
+    "metalloid"            : "#e08d49",
+    "noble gas"            : "#eaeaea",
+    "nonmetal"             : "#f1d4Af",
+    "transition metal"     : "#599d7A",
+}
+
+source = ColumnDataSource(df)
+
+p = figure(plot_width=900, plot_height=500, title="Periodic Table (omitting LA and AC Series)",
+           x_range=groups, y_range=list(reversed(periods)), toolbar_location=None, tools="hover")
+
+p.rect("group", "period", 0.95, 0.95, source=source, fill_alpha=0.6, legend_field="metal",
+       color=factor_cmap('metal', palette=list(cmap.values()), factors=list(cmap.keys())))
+
+text_props = {"source": source, "text_align": "left", "text_baseline": "middle"}
+
+x = dodge("group", -0.4, range=p.x_range)
+
+r = p.text(x=x, y="period", text="symbol", **text_props)
+r.glyph.text_font_style="bold"
+
+r = p.text(x=x, y=dodge("period", 0.3, range=p.y_range), text="atomic number", **text_props)
+r.glyph.text_font_size="11px"
+
+r = p.text(x=x, y=dodge("period", -0.35, range=p.y_range), text="name", **text_props)
+r.glyph.text_font_size="7px"
+
+r = p.text(x=x, y=dodge("period", -0.2, range=p.y_range), text="atomic mass", **text_props)
+r.glyph.text_font_size="7px"
+
+p.text(x=["3", "3"], y=["VI", "VII"], text=["LA", "AC"], text_align="center", text_baseline="middle")
+
+p.hover.tooltips = [
+    ("Name", "@name"),
+    ("Atomic number", "@{atomic number}"),
+    ("Atomic mass", "@{atomic mass}"),
+    ("Type", "@metal"),
+    ("CPK color", "$color[hex, swatch]:CPK"),
+    ("Electronic configuration", "@{electronic configuration}"),
+]
+
+p.outline_line_color = None
+p.grid.grid_line_color = None
+p.axis.axis_line_color = None
+p.axis.major_tick_line_color = None
+p.axis.major_label_standoff = 0
+p.legend.orientation = "horizontal"
+p.legend.location ="top_center"
+
+show(p)
+```
